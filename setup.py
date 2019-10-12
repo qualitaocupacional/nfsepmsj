@@ -33,7 +33,7 @@ setup(
     version=find_version('nfsepmsj', '__init__.py'),
     description='Biblioteca para acesso ao Webservices de NFSe da Prefeitura Municipal de Sao Jose - SC',
     long_description=read_file('README.rst'),
-    url='https://github.com/qualita-ti/PDTI/src/nfsepmsj',
+    url='https://github.com/qualitaocupacional/nfsepmsj',
     author='Qualita Seguranca e Saude Ocupacional',
     author_email='lab.ti@qualitaocupacional.com.br',
     license='Apache 2.0',
