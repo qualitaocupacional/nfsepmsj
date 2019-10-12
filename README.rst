@@ -204,7 +204,7 @@ Os valores possíveis são:
 * 1 - Erro na emissão
 * 2 - Serviço não prestado
 * 3 - Erro de assinatura
-* 4 - Duplicidade a nota
+* 4 - Duplicidade da nota
 * 5 - Erro de processamento
 
 Sendo que os códigos **3** e **5** são de uso restrito da Administração Tributária Municipal.
