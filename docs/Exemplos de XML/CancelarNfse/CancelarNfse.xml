@@ -1,0 +1,51 @@
+<CancelarNfseEnvio xmlns = "http://www.betha.com.br/e-nota-contribuinte-ws">
+	<Pedido>
+		<InfPedidoCancelamento Id="1">
+			<IdentificacaoNfse>
+				<Numero></Numero>
+				<CpfCnpj>
+					<Cnpj></Cnpj>
+				</CpfCnpj>
+				<InscricaoMunicipal></InscricaoMunicipal>
+				<CodigoMunicipio></CodigoMunicipio>
+			</IdentificacaoNfse>
+			<CodigoCancelamento></CodigoCancelamento>
+		</InfPedidoCancelamento>
+	</Pedido>
+</CancelarNfseEnvio>
+
+-------------------------------------------------------
+
+<!--Com cabeçalho Soap-->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:CancelarNfse>
+        <nfseCabecMsg>
+					<![CDATA[
+						 <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+					]]>
+				</nfseCabecMsg>
+        <nfseDadosMsg>
+					<![CDATA[
+						<CancelarNfseEnvio xmlns = "http://www.betha.com.br/e-nota-contribuinte-ws">
+							<Pedido>
+								<InfPedidoCancelamento Id="1">
+									<IdentificacaoNfse>
+										<Numero></Numero>
+										<CpfCnpj>
+											<Cnpj></Cnpj>
+										</CpfCnpj>
+										<InscricaoMunicipal></InscricaoMunicipal>
+										<CodigoMunicipio></CodigoMunicipio>
+									</IdentificacaoNfse>
+									<CodigoCancelamento></CodigoCancelamento>
+								</InfPedidoCancelamento>
+							</Pedido>
+						</CancelarNfseEnvio>
+					]]>
+				</nfseDadosMsg>
+      </e:CancelarNfse>
+   </soapenv:Body>
+</soapenv:Envelope>

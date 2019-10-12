@@ -1,0 +1,16 @@
+*.egg*
+*.py[cod]
+__pycache__
+*.~*
+
+# build files
+build/
+dist/
+**/data/
+
+# Editors
+*.sublime*
+.vscode
+
+# File browsers
+.directory

@@ -1,0 +1,16 @@
+<Rps>
+	<IdentificacaoRps>
+		<Numero>18</Numero>
+		<Serie>A1</Serie>
+		<Tipo>1</Tipo>
+	</IdentificacaoRps>
+	<DataEmissao>2014-12-06</DataEmissao>
+	<!--O status 2 representa o RPS cancelado e consequentemente a nota será gerada como cancelada-->
+	<Status>2</Status>
+	<!--No exemplo abaixo, o RPS 17 é substituído pelo RPS de cima, no caso, o RPS 18-->
+	<RpsSubstituido>
+			<Numero>17</Numero>
+			<Serie>A1</Serie>
+			<Tipo>1</Tipo>
+	</RpsSubstituido>
+</Rps>

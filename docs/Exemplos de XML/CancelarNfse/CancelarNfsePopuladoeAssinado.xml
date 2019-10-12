@@ -1,0 +1,33 @@
+<CancelarNfseEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+	<Pedido>
+		<InfPedidoCancelamento Id="1">
+			<IdentificacaoNfse>
+				<Numero>58</Numero>
+				<CpfCnpj>
+					<Cnpj>45111111111100</Cnpj>
+				</CpfCnpj>
+				<InscricaoMunicipal>123498</InscricaoMunicipal>
+				<CodigoMunicipio>4204608</CodigoMunicipio>
+			</IdentificacaoNfse>
+			<CodigoCancelamento>1</CodigoCancelamento>
+		</InfPedidoCancelamento>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#1"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>S93mdS8wuHwy3c/+7hfFF1pegcY=</DigestValue></Reference></SignedInfo><SignatureValue>D4IX7+qnVAR68iLKHeeQssowN1kpIF/Svi8/bNVJlZL7H2trvyrU82iK+3SdBZG1NV8KvqcKK3ed
+T5SxTTKn4A==</SignatureValue><KeyInfo><X509Data><X509Certificate>MIID9TCCA16gAwIBAgIBEDANBgkqhkiG9w0BAQUFADBXMQswCQYDVQQGEwJCUjEOMAwGA1UECgwF
+QmV0aGExFzAVBgNVBAsMDkJldGhhIFNpc3RlbWFzMR8wHQYDVQQDDBZCZXRoYSBTaXN0ZW1hcyBM
+dGRhIHYxMB4XDTE0MTIwNjEwMjE1MloXDTE1MTIwNjEwMjE1MlowgZExCzAJBgNVBAYTAkJSMRcw
+FQYDVQQKDA5CRVRIQSBTSVNURU1BUzETMBEGA1UECwwKRmx5IGUtTm90YTEcMBoGA1UECwwTQkVU
+SEEgU0lTVEVNQVMgTFREQTE2MDQGA1UEAwwtQUxHRUJSQSBCT09MRUFOQSBDT05UQUJJTCBMVERB
+OjQ1MTExMTExMTExMTAwMFowDQYJKoZIhvcNAQEBBQADSQAwRgJBALSn5GFwV08WqXCCsivli2oq
+YpeYQZvhKHKkvbpibPrpkA92q/sSE53OXeVlZPqytlQxZaBAxgaIdCDjPZHtftcCARGjggHaMIIB
+1jAMBgNVHRMBAf8EAjAAMDcGCCsGAQUFBwEBBCswKTAnBggrBgEFBQcwAoEbaHR0cDovL3d3dy5i
+ZXRoYS5jb20uYnIvYWlhMA4GA1UdDwEB/wQEAwIF4DA+BgNVHSAENzA1MDMGBmBMAQIBBDApMCcG
+CCsGAQUFBwIBFht3d3cuYmV0aGEuY29tLmJyL3BvbGljeS5kcGMwIAYDVR0lAQH/BBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEME8GA1UdEQRIMEagGQYFYEwBAwOgEAQONDUxMTExMTExMTExMDCgCQYF
+YEwBAwWgAKAJBgVgTAEDBqAAgRNqZWFuLm9AaWJlc3QuY29tLmJyMIGoBgNVHR8EgaAwgZ0wMqAw
+oC6GLGh0dHA6Ly9jY2Quc2VycHJvLmdvdi5ici9sY3IvYWNzZXJwcm9yZmIuY3JsMDOgMaAvhi1o
+dHRwOi8vY2NkMi5zZXJwcm8uZ292LmJyL2xjci9hY3NlcnByb3JmYi5jcmwwMqAwoC6GLGh0dHA6
+Ly9jY2Quc2VycHJvLmdvdi5ici9sY3IvYWNzZXJwcm9yZmIuY3JsMB8GA1UdIwQYMBaAFJQIM28y
+QPeHN9rRIKrtLqduyckeMA0GCSqGSIb3DQEBBQUAA4GBAHWJzUvx2zigMHIW+AOnEg6uwHT4FoFr
+1Qz59M5ZTwL+1z7xESKqYM92cFfdIHCfNlqiRJ6NRnprCvcEgkST3dTpyPYCwToAtMbtSg1QTv9y
+qN6bKWkgZHcRkjP4JhD2JavqjDaAfN7N2fn/nHOcFAgUK49G7k/7sg3PIyeKaGiV</X509Certificate></X509Data></KeyInfo></Signature></Pedido>
+</CancelarNfseEnvio>

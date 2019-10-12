@@ -1,0 +1,8 @@
+<Tomador>
+	<RazaoSocial>INSTITUICAO FINANCEIRA</RazaoSocial>
+	<Endereco>
+		<CodigoMunicipio>9999999</CodigoMunicipio>
+		<!--Informe o código do país conforme tabela do Bacen-->
+		<CodigoPais>0400</CodigoPais>
+	</Endereco>
+</Tomador>

@@ -1,0 +1,82 @@
+<ConsultarNfseServicoPrestadoEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+	<Prestador>
+		<CpfCnpj>
+			<Cnpj></Cnpj>
+		</CpfCnpj>
+		<InscricaoMunicipal></InscricaoMunicipal>				
+	</Prestador>
+	<NumeroNfse></NumeroNfse>
+	<PeriodoEmissao>
+		<DataInicial></DataInicial>
+		<DataFinal></DataFinal>
+	</PeriodoEmissao>
+	<PeriodoCompetencia>
+		<DataInicial></DataInicial>
+		<DataFinal></DataFinal>
+	</PeriodoCompetencia>
+	<Tomador>
+		<CpfCnpj>
+			<Cnpj></Cnpj>
+		</CpfCnpj>
+		<InscricaoMunicipal></InscricaoMunicipal>				
+	</Tomador>
+	<Intermediario>
+		<CpfCnpj>
+			<Cnpj></Cnpj>
+		</CpfCnpj>
+		<InscricaoMunicipal></InscricaoMunicipal>				
+	</Intermediario>
+	<Pagina></Pagina>
+</ConsultarNfseServicoPrestadoEnvio>
+
+
+--------------------------------
+
+<!--Com o cabeçalho Soap-->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:ConsultarNfseServicoPrestado>
+        <nfseCabecMsg>
+					<![CDATA[
+						 <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+					]]>
+				</nfseCabecMsg>
+        <nfseDadosMsg>
+					<![CDATA[
+						<ConsultarNfseServicoPrestadoEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+							<Prestador>
+								<CpfCnpj>
+									<Cnpj></Cnpj>
+								</CpfCnpj>
+								<InscricaoMunicipal></InscricaoMunicipal>				
+							</Prestador>
+							<NumeroNfse></NumeroNfse>
+							<PeriodoEmissao>
+								<DataInicial></DataInicial>
+								<DataFinal></DataFinal>
+							</PeriodoEmissao>
+							<PeriodoCompetencia>
+								<DataInicial></DataInicial>
+								<DataFinal></DataFinal>
+							</PeriodoCompetencia>
+							<Tomador>
+								<CpfCnpj>
+									<Cnpj></Cnpj>
+								</CpfCnpj>
+								<InscricaoMunicipal></InscricaoMunicipal>				
+							</Tomador>
+							<Intermediario>
+								<CpfCnpj>
+									<Cnpj></Cnpj>
+								</CpfCnpj>
+								<InscricaoMunicipal></InscricaoMunicipal>				
+							</Intermediario>
+							<Pagina></Pagina>
+						</ConsultarNfseServicoPrestadoEnvio>
+					]]>
+				</nfseDadosMsg>
+      </e:ConsultarNfseServicoPrestado>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,48 @@
+<ConsultarNfseFaixaEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+	<Prestador>
+		<CpfCnpj>
+			<Cnpj></Cnpj>
+		</CpfCnpj>
+		<InscricaoMunicipal></InscricaoMunicipal>
+	</Prestador>
+	<Faixa>
+		<NumeroNfseInicial></NumeroNfseInicial>
+		<NumeroNfseFinal></NumeroNfseFinal>
+	</Faixa>
+	<Pagina></Pagina>
+</ConsultarNfseFaixaEnvio>
+
+
+-------------------------------------------------------------
+
+<!--Com o cabeçalho Soap-->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:ConsultarNfseFaixa>
+        <nfseCabecMsg>
+					<![CDATA[
+						 <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+					]]>
+				</nfseCabecMsg>
+        <nfseDadosMsg>
+					<![CDATA[
+						<ConsultarNfseFaixaEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+							<Prestador>
+								<CpfCnpj>
+									<Cnpj></Cnpj>
+								</CpfCnpj>
+								<InscricaoMunicipal></InscricaoMunicipal>
+							</Prestador>
+							<Faixa>
+								<NumeroNfseInicial></NumeroNfseInicial>
+								<NumeroNfseFinal></NumeroNfseFinal>
+							</Faixa>
+							<Pagina></Pagina>
+						</ConsultarNfseFaixaEnvio>
+					]]>
+				</nfseDadosMsg>
+      </e:ConsultarNfseFaixa>
+   </soapenv:Body>
+</soapenv:Envelope>

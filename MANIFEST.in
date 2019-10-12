@@ -1,0 +1,5 @@
+include LICENSE
+recursive-include nfsepmsj/xsd *.xsd
+
+global-exclude __pycache__
+global-exclude *.pyc

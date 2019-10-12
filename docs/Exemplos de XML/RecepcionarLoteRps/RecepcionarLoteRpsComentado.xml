@@ -1,0 +1,109 @@
+<EnviarLoteRpsEnvio xmlns = "http://www.betha.com.br/e-nota-contribuinte-ws">
+	<LoteRps  Id="lote1" versao="2.02">
+		<NumeroLote></NumeroLote>
+		<CpfCnpj>
+			<Cnpj></Cnpj>
+		</CpfCnpj>
+		<InscricaoMunicipal></InscricaoMunicipal>
+		<QuantidadeRps></QuantidadeRps>
+		<ListaRps>
+			<Rps>
+				<InfDeclaracaoPrestacaoServico  Id="rps_X">
+					<Rps>
+						<IdentificacaoRps>
+							<Numero></Numero>
+							<Serie></Serie>
+							<Tipo></Tipo>
+						</IdentificacaoRps>
+						<!--Data da emissão do RPS-->
+						<DataEmissao></DataEmissao>
+						<!--A nota é gerada como cancelada quando o RPS possui o status de Cancelado.-->
+						<Status></Status>
+						<!--É possível realizar a substituição de notas por meio da tag RpsSubstituido.-->
+						<RpsSubstituido>
+							<Numero></Numero>
+							<Serie></Serie>
+							<Tipo></Tipo>
+						</RpsSubstituido>
+					</Rps>
+					<!--Dia, mês e ano da prestação do serviço-->
+					<!--Quando houver RPS, a nota será gerada com base na <DataEmissao> do RPS, caso contrário utilizará a <Competencia>-->
+					<Competencia></Competencia>
+					<Servico>
+						<Valores>
+							<ValorServicos></ValorServicos>
+							<ValorDeducoes></ValorDeducoes>
+							<ValorPis></ValorPis>
+							<ValorCofins></ValorCofins>
+							<ValorInss></ValorInss>
+							<ValorIr></ValorIr>
+							<ValorCsll></ValorCsll>
+							<OutrasRetencoes></OutrasRetencoes>
+							<ValorIss></ValorIss>
+							<Aliquota></Aliquota>
+							<DescontoIncondicionado></DescontoIncondicionado>
+							<DescontoCondicionado></DescontoCondicionado>	
+						</Valores>
+						<IssRetido></IssRetido>
+						<ResponsavelRetencao></ResponsavelRetencao>
+						<ItemListaServico></ItemListaServico>
+						<!--Conforme determinado pela Administração Tributária Municipal, este campo deve ser enviado ou não-->
+						<CodigoCnae></CodigoCnae>
+						<CodigoTributacaoMunicipio></CodigoTributacaoMunicipio>
+						<Discriminacao></Discriminacao>
+						<CodigoMunicipio></CodigoMunicipio>
+						<CodigoPais></CodigoPais>
+						<ExigibilidadeISS></ExigibilidadeISS>
+						<MunicipioIncidencia></MunicipioIncidencia>
+						<NumeroProcesso></NumeroProcesso>
+					</Servico>
+					<Prestador>
+						<CpfCnpj>
+							<Cnpj></Cnpj>
+						</CpfCnpj>
+						<InscricaoMunicipal></InscricaoMunicipal>
+					</Prestador>
+					<Tomador>
+						<IdentificacaoTomador>
+							<CpfCnpj>
+								<Cnpj></Cnpj>
+							</CpfCnpj>
+							<InscricaoMunicipal></InscricaoMunicipal>				
+						</IdentificacaoTomador>
+						<RazaoSocial></RazaoSocial>
+						<Endereco>
+							<Endereco></Endereco>
+							<Numero></Numero>
+							<Complemento></Complemento>
+							<Bairro></Bairro>
+							<CodigoMunicipio></CodigoMunicipio>
+							<Uf></Uf>
+							<CodigoPais></CodigoPais>
+							<Cep></Cep>
+						</Endereco>
+						<Contato>
+							<Telefone></Telefone>
+							<Email></Email>
+						</Contato>
+					</Tomador>
+					<Intermediario>
+						<IdentificacaoIntermediario>
+							<CpfCnpj>
+								<Cnpj></Cnpj>
+							</CpfCnpj>
+							<InscricaoMunicipal></InscricaoMunicipal>				
+						</IdentificacaoIntermediario>
+						<RazaoSocial></RazaoSocial>
+					</Intermediario>
+					<ConstrucaoCivil>
+						<CodigoObra></CodigoObra>
+						<Art></Art>
+					</ConstrucaoCivil>
+					<RegimeEspecialTributacao></RegimeEspecialTributacao>
+					<OptanteSimplesNacional></OptanteSimplesNacional>
+					<IncentivoFiscal></IncentivoFiscal>
+				</InfDeclaracaoPrestacaoServico>
+			</Rps>
+		</ListaRps>
+	</LoteRps>
+</EnviarLoteRpsEnvio>

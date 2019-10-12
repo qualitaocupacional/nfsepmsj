@@ -1,0 +1,39 @@
+<SubstituirNfseEnvio xmlns = "http://www.betha.com.br/e-nota-contribuinte-ws">
+	<SubstituicaoNfse Id="subst">
+		<Pedido>
+			<InfPedidoCancelamento Id="cancel">
+				<IdentificacaoNfse>
+					<Numero>59</Numero>
+					<CpfCnpj>
+						<Cnpj>45111111111100</Cnpj>
+					</CpfCnpj>
+					<CodigoMunicipio>4204608</CodigoMunicipio>
+				</IdentificacaoNfse>
+				<CodigoCancelamento>4</CodigoCancelamento>
+			</InfPedidoCancelamento>
+		</Pedido>
+		<Rps>
+			<InfDeclaracaoPrestacaoServico  Id="rps">
+				<Competencia>2014-12-02</Competencia>
+				<Servico>
+					<Valores>
+						<ValorServicos>110</ValorServicos>
+					</Valores>
+					<IssRetido>2</IssRetido>
+					<ItemListaServico>0702</ItemListaServico>
+					<Discriminacao>Prog.</Discriminacao>
+					<CodigoMunicipio>4204608</CodigoMunicipio>
+					<ExigibilidadeISS>1</ExigibilidadeISS>
+					<MunicipioIncidencia>4204608</MunicipioIncidencia>
+				</Servico>
+				<Prestador>
+					<CpfCnpj>
+						<Cnpj>45111111111100</Cnpj>
+				</CpfCnpj>
+				</Prestador>
+				<OptanteSimplesNacional>2</OptanteSimplesNacional>
+				<IncentivoFiscal>2</IncentivoFiscal>
+			</InfDeclaracaoPrestacaoServico>
+		</Rps>
+	</SubstituicaoNfse>
+</SubstituirNfseEnvio>

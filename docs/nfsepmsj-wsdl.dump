@@ -1,0 +1,112 @@
+Prefixes:
+     ns0: http://www.betha.com.br/e-nota-contribuinte-ws
+     xsd: http://www.w3.org/2001/XMLSchema
+
+Global elements:
+     ns0:CancelarNfse(ns0:CancelarNfse)
+     ns0:CancelarNfseResponse(ns0:CancelarNfseResponse)
+     ns0:ConsultarLoteRps(ns0:ConsultarLoteRps)
+     ns0:ConsultarLoteRpsResponse(ns0:ConsultarLoteRpsResponse)
+     ns0:ConsultarNfseFaixa(ns0:ConsultarNfseFaixa)
+     ns0:ConsultarNfseFaixaResponse(ns0:ConsultarNfseFaixaResponse)
+     ns0:ConsultarNfsePorRps(ns0:ConsultarNfsePorRps)
+     ns0:ConsultarNfsePorRpsResponse(ns0:ConsultarNfsePorRpsResponse)
+     ns0:ConsultarNfseServicoPrestado(ns0:ConsultarNfseServicoPrestado)
+     ns0:ConsultarNfseServicoPrestadoResponse(ns0:ConsultarNfseServicoPrestadoResponse)
+     ns0:ConsultarNfseServicoTomado(ns0:ConsultarNfseServicoTomado)
+     ns0:ConsultarNfseServicoTomadoResponse(ns0:ConsultarNfseServicoTomadoResponse)
+     ns0:GerarNfse(ns0:GerarNfse)
+     ns0:GerarNfseResponse(ns0:GerarNfseResponse)
+     ns0:RecepcionarLoteRps(ns0:RecepcionarLoteRps)
+     ns0:RecepcionarLoteRpsResponse(ns0:RecepcionarLoteRpsResponse)
+     ns0:RecepcionarLoteRpsSincrono(ns0:RecepcionarLoteRpsSincrono)
+     ns0:RecepcionarLoteRpsSincronoResponse(ns0:RecepcionarLoteRpsSincronoResponse)
+     ns0:SubstituirNfse(ns0:SubstituirNfse)
+     ns0:SubstituirNfseResponse(ns0:SubstituirNfseResponse)
+     
+
+Global types:
+     xsd:anyType
+     ns0:CancelarNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:CancelarNfseResponse(return: xsd:string)
+     ns0:ConsultarLoteRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:ConsultarLoteRpsResponse(return: xsd:string)
+     ns0:ConsultarNfseFaixa(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:ConsultarNfseFaixaResponse(return: xsd:string)
+     ns0:ConsultarNfsePorRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:ConsultarNfsePorRpsResponse(return: xsd:string)
+     ns0:ConsultarNfseServicoPrestado(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:ConsultarNfseServicoPrestadoResponse(return: xsd:string)
+     ns0:ConsultarNfseServicoTomado(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:ConsultarNfseServicoTomadoResponse(return: xsd:string)
+     ns0:GerarNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:GerarNfseResponse(return: xsd:string)
+     ns0:RecepcionarLoteRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:RecepcionarLoteRpsResponse(return: xsd:string)
+     ns0:RecepcionarLoteRpsSincrono(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:RecepcionarLoteRpsSincronoResponse(return: xsd:string)
+     ns0:SubstituirNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string)
+     ns0:SubstituirNfseResponse(return: xsd:string)
+     xsd:ENTITIES
+     xsd:ENTITY
+     xsd:ID
+     xsd:IDREF
+     xsd:IDREFS
+     xsd:NCName
+     xsd:NMTOKEN
+     xsd:NMTOKENS
+     xsd:NOTATION
+     xsd:Name
+     xsd:QName
+     xsd:anySimpleType
+     xsd:anyURI
+     xsd:base64Binary
+     xsd:boolean
+     xsd:byte
+     xsd:date
+     xsd:dateTime
+     xsd:decimal
+     xsd:double
+     xsd:duration
+     xsd:float
+     xsd:gDay
+     xsd:gMonth
+     xsd:gMonthDay
+     xsd:gYear
+     xsd:gYearMonth
+     xsd:hexBinary
+     xsd:int
+     xsd:integer
+     xsd:language
+     xsd:long
+     xsd:negativeInteger
+     xsd:nonNegativeInteger
+     xsd:nonPositiveInteger
+     xsd:normalizedString
+     xsd:positiveInteger
+     xsd:short
+     xsd:string
+     xsd:time
+     xsd:token
+     xsd:unsignedByte
+     xsd:unsignedInt
+     xsd:unsignedLong
+     xsd:unsignedShort
+
+Bindings:
+     Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}NfseWSBinding
+
+Service: NfseWSService
+     Port: nfseSOAP (Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}NfseWSBinding)
+         Operations:
+            CancelarNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            ConsultarLoteRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            ConsultarNfseFaixa(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            ConsultarNfsePorRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            ConsultarNfseServicoPrestado(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            ConsultarNfseServicoTomado(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            GerarNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            RecepcionarLoteRps(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            RecepcionarLoteRpsSincrono(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+            SubstituirNfse(nfseCabecMsg: xsd:string, nfseDadosMsg: xsd:string) -> return: xsd:string
+

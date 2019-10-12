@@ -1,0 +1,115 @@
+<!--Quando utilizar, por exemplo, o Soap-UI para envio do XML deve ser utilizada a estrutura abaixo-->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:SERVICO_A_SER_UTILIZADO>
+        <nfseCabecMsg>
+					<![CDATA[
+						 <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+					]]>
+				</nfseCabecMsg>
+        <nfseDadosMsg>
+					<![CDATA[
+						...
+						Conteúdo do XML
+						...
+					]]>
+				</nfseDadosMsg>
+      </e:SERVICO_A_SER_UTILIZADO>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+-------------------------------------------------------------------
+<!--Exemplos de envio via Soap-UI-->
+
+<!--Exemplo de envio para o serviço ConsultarLoteRps-->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:ConsultarLoteRps>
+         <nfseCabecMsg>
+	<![CDATA[
+	   <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+	]]>
+	</nfseCabecMsg>
+         <nfseDadosMsg>
+	<![CDATA[
+	<ConsultarLoteRpsEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+		<Prestador>
+		<CpfCnpj>
+			<Cnpj>45111111111100</Cnpj>
+		</CpfCnpj>
+		</Prestador>
+		<Protocolo>141542179222170</Protocolo>
+	</ConsultarLoteRpsEnvio>
+	]]>
+	</nfseDadosMsg>
+      </e:ConsultarLoteRps>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+<!--Exemplo de envio para o serviço GerarNfse -->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:GerarNfse>
+         <nfseCabecMsg>
+	<![CDATA[
+	   <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+	]]>
+	</nfseCabecMsg>
+         <nfseDadosMsg>
+	<![CDATA[
+	<GerarNfseEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+	<Rps>
+		<InfDeclaracaoPrestacaoServico Id="lote1">
+			<Competencia>2014-12-02</Competencia>
+			<Servico>
+				<Valores>
+					<ValorServicos>110</ValorServicos>
+				</Valores>
+				<IssRetido>2</IssRetido>
+				<ItemListaServico>0702</ItemListaServico>
+				<Discriminacao>Prog.</Discriminacao>
+				<CodigoMunicipio>4204608</CodigoMunicipio>
+				<ExigibilidadeISS>1</ExigibilidadeISS>
+				<MunicipioIncidencia>4204608</MunicipioIncidencia>
+			</Servico>
+			<Prestador>
+				<CpfCnpj>
+					<Cnpj>45111111111100</Cnpj>
+			</CpfCnpj>
+			</Prestador>
+			<OptanteSimplesNacional>2</OptanteSimplesNacional>
+			<IncentivoFiscal>2</IncentivoFiscal>
+		</InfDeclaracaoPrestacaoServico>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#lote1"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>rQlBWbtyR5dU1/hUY8B4PSrgUrk=</DigestValue></Reference></SignedInfo><SignatureValue>QwjOBxhHXro/RKShSSPthzn6f+CpuylZhkUo4/iGKpnUp8f0cEPuxJ9RW1ZnJ+YHMu2yXtW3Lirh
+hA/CIpAftw==</SignatureValue><KeyInfo><X509Data><X509Certificate>MIID9TCCA16gAwIBAgIBEDANBgkqhkiG9w0BAQUFADBXMQswCQYDVQQGEwJCUjEOMAwGA1UECgwF
+QmV0aGExFzAVBgNVBAsMDkJldGhhIFNpc3RlbWFzMR8wHQYDVQQDDBZCZXRoYSBTaXN0ZW1hcyBM
+dGRhIHYxMB4XDTE0MTIwNjEwMjE1MloXDTE1MTIwNjEwMjE1MlowgZExCzAJBgNVBAYTAkJSMRcw
+FQYDVQQKDA5CRVRIQSBTSVNURU1BUzETMBEGA1UECwwKRmx5IGUtTm90YTEcMBoGA1UECwwTQkVU
+SEEgU0lTVEVNQVMgTFREQTE2MDQGA1UEAwwtQUxHRUJSQSBCT09MRUFOQSBDT05UQUJJTCBMVERB
+OjQ1MTExMTExMTExMTAwMFowDQYJKoZIhvcNAQEBBQADSQAwRgJBALSn5GFwV08WqXCCsivli2oq
+YpeYQZvhKHKkvbpibPrpkA92q/sSE53OXeVlZPqytlQxZaBAxgaIdCDjPZHtftcCARGjggHaMIIB
+1jAMBgNVHRMBAf8EAjAAMDcGCCsGAQUFBwEBBCswKTAnBggrBgEFBQcwAoEbaHR0cDovL3d3dy5i
+ZXRoYS5jb20uYnIvYWlhMA4GA1UdDwEB/wQEAwIF4DA+BgNVHSAENzA1MDMGBmBMAQIBBDApMCcG
+CCsGAQUFBwIBFht3d3cuYmV0aGEuY29tLmJyL3BvbGljeS5kcGMwIAYDVR0lAQH/BBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEME8GA1UdEQRIMEagGQYFYEwBAwOgEAQONDUxMTExMTExMTExMDCgCQYF
+YEwBAwWgAKAJBgVgTAEDBqAAgRNqZWFuLm9AaWJlc3QuY29tLmJyMIGoBgNVHR8EgaAwgZ0wMqAw
+oC6GLGh0dHA6Ly9jY2Quc2VycHJvLmdvdi5ici9sY3IvYWNzZXJwcm9yZmIuY3JsMDOgMaAvhi1o
+dHRwOi8vY2NkMi5zZXJwcm8uZ292LmJyL2xjci9hY3NlcnByb3JmYi5jcmwwMqAwoC6GLGh0dHA6
+Ly9jY2Quc2VycHJvLmdvdi5ici9sY3IvYWNzZXJwcm9yZmIuY3JsMB8GA1UdIwQYMBaAFJQIM28y
+QPeHN9rRIKrtLqduyckeMA0GCSqGSIb3DQEBBQUAA4GBAHWJzUvx2zigMHIW+AOnEg6uwHT4FoFr
+1Qz59M5ZTwL+1z7xESKqYM92cFfdIHCfNlqiRJ6NRnprCvcEgkST3dTpyPYCwToAtMbtSg1QTv9y
+qN6bKWkgZHcRkjP4JhD2JavqjDaAfN7N2fn/nHOcFAgUK49G7k/7sg3PIyeKaGiV</X509Certificate></X509Data></KeyInfo></Signature></Rps>
+</GerarNfseEnvio>
+	]]>
+	</nfseDadosMsg>
+      </e:GerarNfse>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,29 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:e="http://www.betha.com.br/e-nota-contribuinte-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <e:ConsultarNfseFaixa>
+        <nfseCabecMsg>
+					<![CDATA[
+						 <cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>
+					]]>
+				</nfseCabecMsg>
+        <nfseDadosMsg>
+					<![CDATA[
+						<ConsultarNfseFaixaEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+							<Prestador>
+								<CpfCnpj>
+									<Cnpj>45111111111100</Cnpj>
+								</CpfCnpj>
+								<InscricaoMunicipal>123498</InscricaoMunicipal>
+							</Prestador>
+							<Faixa>
+								<NumeroNfseInicial>50</NumeroNfseInicial>
+								<NumeroNfseFinal>60</NumeroNfseFinal>
+							</Faixa>
+							<Pagina>1</Pagina>
+						</ConsultarNfseFaixaEnvio>
+					]]>
+				</nfseDadosMsg>
+      </e:ConsultarNfseFaixa>
+   </soapenv:Body>
+</soapenv:Envelope>
