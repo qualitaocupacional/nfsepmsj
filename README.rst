@@ -87,7 +87,7 @@ Estrutura do dicionário com os campos da nota fiscal:
 +-------------------------------------+------------------------------+
 | 'rps.data.emissao'                  |                              |
 +-------------------------------------+------------------------------+
-| 'rps.status'                        |                              |
+| 'rps.status'                        | 1-Normal, 2-Cancelado        |
 +-------------------------------------+------------------------------+
 | 'rps.substituido.numero'            |                              |
 +-------------------------------------+------------------------------+
@@ -253,3 +253,71 @@ E *errors*, se houver algum, como, por exemplo, erro de validação do XML, vai 
             'error': 'a mensagem do erro'
         }
     ]
+
+
+Campos adicionais para **Envio em Lote** de NFSe:
+
++-------------------------------------+--------------------------------------+
+| Nome                                | Descrição                            |
++=====================================+======================================+
+| 'lote.id'                           | Identificação única do lote          |
++-------------------------------------+--------------------------------------+
+| 'lote.numero'                       | Número do lote                       |
++-------------------------------------+--------------------------------------+
+| 'nf.prestador.documento'            | CPF/CNPJ do prestador                |
++-------------------------------------+--------------------------------------+
+| 'nf.prestador.inscricao_municipal'  | Inscrição municipal do prestador     |
++-------------------------------------+--------------------------------------+
+
+Lembrando que nesta modalidade os dados de RPS devem conter os campos:
+
+* 'rps.numero'
+* 'rps.serie'
+* 'rps.tipo'
+* 'rps.data.emissao'
+* 'rps.status'
+
+**Enviando um lote (sincrono)**
+
+.. code:: python
+
+    from nfsepmsj.client import NFSe
+
+    pfx_file = '/caminho/do/arquivo.pfx'
+    pfx_passwd = 'Senha do arquivo pfx'
+
+    nfse = NFSe(pfx_file, pfx_passwd)
+    # ...
+
+    nfse.add_rps(rps01_data)
+    nfse.add_rps(rps02_data)
+    # ...
+    batch_data = {
+        'lote.id': 'lote_id',
+        'lote.numero': '201901',
+        'nf.prestador.documento': '99999999999999',
+        'nf.prestador.inscricao_municipal': '9999999',
+    }
+    result, errors = nfse.send_batch(batch_data)
+
+
+*result* vai ser um dicionário com a estrutura:
+
+.. code:: javascript
+
+    {
+        'lote.id': 'lote_id',
+        'xml.response': 'XML com a resposta do webservices',
+        'xml': 'o XML que foi gerado para envio',
+    }
+
+E *errors*, se houver algum, como, por exemplo, erro de validação do XML, vai ser:
+
+.. code:: javascript
+
+    {
+        'lote.id': 'lote_id',
+        'xml': 'o XML que foi gerado para envio',
+        'error': 'a mensagem do erro'
+    }
+
