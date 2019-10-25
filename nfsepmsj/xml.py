@@ -256,7 +256,7 @@ def load_fromjson(json_obj, root=None):
         if isinstance(py_, types.DictType):
             for k in py_:
                 if root_tag is None and not has_root:
-                    attrs, nsmap, value_attr = _check_attrs(py_[k])
+                    attrs, nsmap, _ = _check_attrs(py_[k])
                     root_tag = create_root_element(k, ns=nsmap, **attrs if attrs else {})
                     has_root = True
                 recursive_add_element(root_tag, py_[k], nsmap_default=nsmap)

@@ -13,6 +13,7 @@ install_requires = [
     'signxml>=2.5.2',
     'pyOpenSSL>=17.5.0',
     'six>=1.11.0',
+    'xmltodict>=0.12.0',
 ]
 
 

@@ -1,0 +1,112 @@
+Prefixes:
+     ns0: http://www.betha.com.br/e-nota-contribuinte-ws
+     ns1: http://www.w3.org/2000/09/xmldsig#
+     xsd: http://www.w3.org/2001/XMLSchema
+
+Global elements:
+     ns0:EnviarLoteRpsEnvio(ns0:EnviarLoteRpsEnvio)
+     ns0:EnviarLoteRpsEnvioResponse(ns0:EnviarLoteRpsEnvioResponse)
+     ns0:EnviarLoteRpsResposta(ns0:enviarLoteRpsResposta)
+     ns1:CanonicalizationMethod(ns1:tcCanonicalizationMethod)
+     ns1:DigestMethod(ns1:tcDigestMethod)
+     ns1:DigestValue(xsd:string)
+     ns1:Reference(ns0:tcReference)
+     ns1:Signature(ns1:Signature)
+     ns1:SignatureMethod(ns1:tcSignatureMethod)
+     ns1:Transform(ns0:tcTransform)
+     ns1:Transforms(ns0:tcTransforms)
+     ns1:X509Data(ns1:tcX509Data)
+     ns1:tcCanonicalizationMethod(ns1:tcCanonicalizationMethod)
+     ns1:tcDigestMethod(ns1:tcDigestMethod)
+     ns1:tcSignatureMethod(ns1:tcSignatureMethod)
+     ns1:tcX509Data(ns1:tcX509Data)
+     
+
+Global types:
+     xsd:anyType
+     ns0:Condicao
+     ns0:EnviarLoteRpsEnvio(LoteRps: ns0:tcLoteRps, Signature: ns1:Signature)
+     ns0:EnviarLoteRpsEnvioResponse(EnviarLoteRpsResposta: ns0:enviarLoteRpsResposta)
+     ns0:enviarLoteRpsResposta(NumeroLote: xsd:integer, DataRecebimento: xsd:dateTime, Protocolo: xsd:integer, ListaMensagemRetorno: ns0:tcListaMensagemRetorno)
+     ns0:tcCondicoesPagamentos(Condicao: ns0:Condicao, QtdParcela: xsd:int, Parcelas: ns0:tcParcelas[])
+     ns0:tcContato(Telefone: xsd:string, Email: xsd:string)
+     ns0:tcCpfCnpj(Cnpj: xsd:string, Cpf: xsd:string)
+     ns0:tcDadosConstrucaoCivil(CodigoObra: xsd:string, Art: xsd:string)
+     ns0:tcDadosServico(Valores: ns0:tcValores, ItemListaServico: xsd:string, CodigoCnae: xsd:string, CodigoTributacaoMunicipio: xsd:string, Discriminacao: xsd:string, CodigoMunicipio: xsd:int, CodigoPais: xsd:string)
+     ns0:tcDadosTomador(IdentificacaoTomador: ns0:tcIdentificacaoTomador, RazaoSocial: xsd:string, Endereco: ns0:tcEndereco, Contato: ns0:tcContato)
+     ns0:tcEndereco(Endereco: xsd:string, Numero: xsd:string, Complemento: xsd:string, Bairro: xsd:string, CodigoMunicipio: xsd:int, Uf: xsd:string, CodigoPais: xsd:string, Cep: xsd:string)
+     ns0:tcIdentificacaoIntermediarioServico(RazaoSocial: xsd:string, CpfCnpj: ns0:tcCpfCnpj, InscricaoMunicipal: xsd:string)
+     ns0:tcIdentificacaoPrestador(Cnpj: xsd:string, InscricaoMunicipal: xsd:string)
+     ns0:tcIdentificacaoRps(Numero: xsd:string, Serie: xsd:string, Tipo: xsd:int)
+     ns0:tcIdentificacaoTomador(CpfCnpj: ns0:tcCpfCnpj, InscricaoMunicipal: xsd:string, InscricaoEstadual: xsd:string)
+     ns0:tcInfRps(IdentificacaoRps: ns0:tcIdentificacaoRps, DataEmissao: xsd:dateTime, NaturezaOperacao: xsd:int, RegimeEspecialTributacao: xsd:int, OptanteSimplesNacional: xsd:int, IncentivadorCultural: xsd:int, Status: xsd:int, RpsSubstituido: ns0:tcIdentificacaoRps, Servico: ns0:tcDadosServico, Prestador: ns0:tcIdentificacaoPrestador, Tomador: ns0:tcDadosTomador, IntermediarioServico: ns0:tcIdentificacaoIntermediarioServico, ConstrucaoCivil: ns0:tcDadosConstrucaoCivil, OutrasInformacoes: xsd:string, CondicaoPagamento: ns0:tcCondicoesPagamentos[], Id: xsd:string)
+     ns0:tcKeyInfo(X509Data: ns1:tcX509Data)
+     ns0:tcListaMensagemRetorno(MensagemRetorno: ns0:tcMensagemRetorno[])
+     ns0:tcListaRps(Rps: ns0:tcRps[])
+     ns0:tcLoteRps(NumeroLote: xsd:long, Cnpj: xsd:string, InscricaoMunicipal: xsd:string, QuantidadeRps: xsd:int, CodigoMunicipio: xsd:string, ListaRps: ns0:tcListaRps, Id: xsd:string)
+     ns0:tcMensagemRetorno(Codigo: xsd:string, Mensagem: xsd:string, Correcao: xsd:string)
+     ns0:tcParcelas(Parcela: xsd:int, DataVencimento: xsd:string, Valor: xsd:decimal)
+     ns0:tcReference(Transforms: ns0:tcTransforms, DigestMethod: ns1:tcDigestMethod, DigestValue: xsd:string, URI: xsd:string)
+     ns0:tcRps(InfRps: ns0:tcInfRps, Signature: ns1:Signature)
+     ns0:tcSigInfo(CanonicalizationMethod: ns1:tcCanonicalizationMethod, SignatureMethod: ns1:tcSignatureMethod, Reference: ns0:tcReference)
+     ns0:tcTransform(Algorithm: xsd:string)
+     ns0:tcTransforms(Transform: ns0:tcTransform[])
+     ns0:tcValores(ValorServicos: xsd:decimal, ValorDeducoes: xsd:decimal, ValorPis: xsd:decimal, ValorCofins: xsd:decimal, ValorInss: xsd:decimal, ValorIr: xsd:decimal, ValorCsll: xsd:decimal, IssRetido: xsd:int, ValorIss: xsd:decimal, OutrasRetencoes: xsd:decimal, BaseCalculo: xsd:decimal, Aliquota: xsd:decimal, ValorLiquidoNfse: xsd:decimal, ValorIssRetido: xsd:decimal, DescontoCondicionado: xsd:decimal, DescontoIncondicionado: xsd:decimal)
+     ns1:Signature(SignedInfo: ns0:tcSigInfo, SignatureValue: xsd:string, KeyInfo: ns0:tcKeyInfo)
+     ns1:tcCanonicalizationMethod(Algorithm: xsd:string)
+     ns1:tcDigestMethod(Algorithm: xsd:string)
+     ns1:tcSignatureMethod(Algorithm: xsd:string)
+     ns1:tcX509Data(X509Certificate: xsd:string)
+     xsd:ENTITIES
+     xsd:ENTITY
+     xsd:ID
+     xsd:IDREF
+     xsd:IDREFS
+     xsd:NCName
+     xsd:NMTOKEN
+     xsd:NMTOKENS
+     xsd:NOTATION
+     xsd:Name
+     xsd:QName
+     xsd:anySimpleType
+     xsd:anyURI
+     xsd:base64Binary
+     xsd:boolean
+     xsd:byte
+     xsd:date
+     xsd:dateTime
+     xsd:decimal
+     xsd:double
+     xsd:duration
+     xsd:float
+     xsd:gDay
+     xsd:gMonth
+     xsd:gMonthDay
+     xsd:gYear
+     xsd:gYearMonth
+     xsd:hexBinary
+     xsd:int
+     xsd:integer
+     xsd:language
+     xsd:long
+     xsd:negativeInteger
+     xsd:nonNegativeInteger
+     xsd:nonPositiveInteger
+     xsd:normalizedString
+     xsd:positiveInteger
+     xsd:short
+     xsd:string
+     xsd:time
+     xsd:token
+     xsd:unsignedByte
+     xsd:unsignedInt
+     xsd:unsignedLong
+     xsd:unsignedShort
+
+Bindings:
+     Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}RecepcionarLoteRpsBinding
+
+Service: RecepcionarLoteRpsService
+     Port: RecepcionarLoteRpsPort (Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}RecepcionarLoteRpsBinding)
+         Operations:
+            EnviarLoteRpsEnvio(LoteRps: ns0:tcLoteRps, Signature: ns1:Signature) -> EnviarLoteRpsResposta: ns0:enviarLoteRpsResposta

@@ -15,7 +15,39 @@
 
 __version__ = '0.0.2'
 
-WSURL = {
-    'production': 'https://e-gov.betha.com.br/e-nota-contribuinte-ws/nfseWS?wsdl',
-    'test': 'https://e-gov.betha.com.br/e-nota-contribuinte-test-ws/nfseWS?wsdl'
+ABRASF_WSURL = {
+    '2.02': {
+        'production': 'https://e-gov.betha.com.br/e-nota-contribuinte-ws/nfseWS?wsdl',
+        'test': 'https://e-gov.betha.com.br/e-nota-contribuinte-test-ws/nfseWS?wsdl',
+    }
 }
+
+BETHA_WSURL = {
+    '01': {
+        'production': 'https://e-gov.betha.com.br/e-nota-contribuinte-ws/{service}?wsdl',
+        'test': 'https://e-gov.betha.com.br/e-nota-contribuinte-test-ws/{service}?wsdl',
+    }
+}
+
+# Betha Services available:
+# ## Recepcao e Processamento de RPS
+# recepcionarLoteRps
+
+# ## Consulta de Situacao de Lote de RPS
+# consultarSituacaoLoteRps
+
+# ## Consulta de Lote de RPS (com condicao de pagamento)
+# consultarLoteRpsV110
+
+# ## Consulta de NFS-e por RPS (com condicao de pagamento)
+# consultarNfsePorRpsV110
+
+# ## Consulta de NFS-e (com condicao de pagamento)
+# consultarNfseV110
+
+# ## Cancelamento de NFS-e
+# cancelarNfse
+
+# ## Consulta de Taxas Diversas
+# consultarTaxasDiversas
+

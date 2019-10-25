@@ -1,0 +1,72 @@
+
+Prefixes:
+     ns0: http://www.betha.com.br/e-nota-contribuinte-ws
+     xsd: http://www.w3.org/2001/XMLSchema
+
+Global elements:
+     ns0:ConsultarSituacaoLoteRpsEnvio(ns0:ConsultarSituacaoLoteRpsEnvio)
+     ns0:ConsultarSituacaoLoteRpsEnvioResponse(ns0:ConsultarSituacaoLoteRpsEnvioResponse)
+     
+
+Global types:
+     xsd:anyType
+     ns0:ConsultarSituacaoLoteRpsEnvio(Prestador: ns0:tcIdentificacaoPrestador, Protocolo: xsd:integer)
+     ns0:ConsultarSituacaoLoteRpsEnvioResponse(ConsultarSituacaoLoteRpsResposta: ns0:consultarSituacaoLoteRpsResposta)
+     ns0:consultarSituacaoLoteRpsResposta(NumeroLote: xsd:integer, Situacao: xsd:string, ListaMensagemRetorno: ns0:tcListaMensagemRetorno)
+     ns0:tcIdentificacaoPrestador(Cnpj: xsd:string, InscricaoMunicipal: xsd:string)
+     ns0:tcListaMensagemRetorno(MensagemRetorno: ns0:tcMensagemRetorno[])
+     ns0:tcMensagemRetorno(Codigo: xsd:string, Mensagem: xsd:string, Correcao: xsd:string)
+     xsd:ENTITIES
+     xsd:ENTITY
+     xsd:ID
+     xsd:IDREF
+     xsd:IDREFS
+     xsd:NCName
+     xsd:NMTOKEN
+     xsd:NMTOKENS
+     xsd:NOTATION
+     xsd:Name
+     xsd:QName
+     xsd:anySimpleType
+     xsd:anyURI
+     xsd:base64Binary
+     xsd:boolean
+     xsd:byte
+     xsd:date
+     xsd:dateTime
+     xsd:decimal
+     xsd:double
+     xsd:duration
+     xsd:float
+     xsd:gDay
+     xsd:gMonth
+     xsd:gMonthDay
+     xsd:gYear
+     xsd:gYearMonth
+     xsd:hexBinary
+     xsd:int
+     xsd:integer
+     xsd:language
+     xsd:long
+     xsd:negativeInteger
+     xsd:nonNegativeInteger
+     xsd:nonPositiveInteger
+     xsd:normalizedString
+     xsd:positiveInteger
+     xsd:short
+     xsd:string
+     xsd:time
+     xsd:token
+     xsd:unsignedByte
+     xsd:unsignedInt
+     xsd:unsignedLong
+     xsd:unsignedShort
+
+Bindings:
+     Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}ConsultarSituacaoLoteRpsBinding
+
+Service: ConsultarSituacaoLoteRpsService
+     Port: ConsultarSituacaoLoteRpsPort (Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}ConsultarSituacaoLoteRpsBinding)
+         Operations:
+            ConsultarSituacaoLoteRpsEnvio(Prestador: ns0:tcIdentificacaoPrestador, Protocolo: xsd:integer) -> ConsultarSituacaoLoteRpsResposta: ns0:consultarSituacaoLoteRpsResposta
+

@@ -1,0 +1,190 @@
+<EnviarLoteRpsEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+    <!-- 1-1 -->
+    <LoteRps>
+        <!-- 1-1 -->
+        <NumeroLote></NumeroLote>
+        <!-- 1-1 -->
+        <Cnpj></Cnpj>
+        <!-- 1-1 -->
+        <InscricaoMunicipal></InscricaoMunicipal>
+        <!-- 1-1 -->
+        <QuantidadeRps></QuantidadeRps>
+        <!-- 1-1 -->
+        <ListaRps>
+            <!-- 1-N -->
+            <Rps>
+                <!-- 1-1 -->
+                <Rps Id="">
+                    <!-- 1-1 -->
+                    <IdentificacaoRps>
+                        <!-- 1-1 -->
+                        <Numero></Numero>
+                        <!-- 1-1 -->
+                        <Serie></Serie>
+                        <!-- 1-1 -->
+                        <Tipo></Tipo>
+                    </IdentificacaoRps>
+                    <!-- 1-1 -->
+                    <DataEmissao></DataEmissao>
+                    <!-- 1-1 -->
+                    <NaturezaOperacao></NaturezaOperacao>
+                    <!-- 0-1 -->
+                    <RegimeEspecialTributacao></RegimeEspecialTributacao>
+                    <!-- 1-1 -->
+                    <OptanteSimplesNacional></OptanteSimplesNacional>
+                    <!-- 1-1 -->
+                    <IncentivadorCultural></IncentivadorCultural>
+                    <!-- 1-1 -->
+                    <Status></Status>
+                    <!-- 0-1 -->
+                    <RpsSubstituido>
+                        <!-- 1-1 -->
+                        <Numero></Numero>
+                        <!-- 1-1 -->
+                        <Serie></Serie>
+                        <!-- 1-1 -->
+                        <Tipo></Tipo>
+                    </RpsSubstituido>
+                    <!-- 1-1 -->
+                    <Servico>
+                        <!-- 1-1 -->
+                        <Valores>
+                            <!-- 1-1 -->
+							<ValorServicos></ValorServicos>
+                            <!-- 0-1 -->
+							<ValorDeducoes></ValorDeducoes>
+                            <!-- 0-1 -->
+							<ValorPis></ValorPis>
+                            <!-- 0-1 -->
+							<ValorCofins></ValorCofins>
+                            <!-- 0-1 -->
+							<ValorInss></ValorInss>
+                            <!-- 0-1 -->
+							<ValorIr></ValorIr>
+                            <!-- 0-1 -->
+							<ValorCsll></ValorCsll>
+                            <!-- 1-1 -->
+                            <IssRetido></IssRetido>
+                            <!-- 0-1 -->
+							<ValorIss></ValorIss>
+                            <!-- 0-1 -->
+							<OutrasRetencoes></OutrasRetencoes>
+                            <!-- 1-1 -->
+                            <BaseCalculo></BaseCalculo>
+                            <!-- 0-1 -->
+							<Aliquota></Aliquota>
+                            <!-- 0-1 -->
+                            <ValorLiquidoNfse></ValorLiquidoNfse>
+                            <!-- 0-1 -->
+                            <ValorIssRetido></ValorIssRetido>
+                            <!-- 0-1 -->
+							<DescontoCondicionado></DescontoCondicionado>	
+                            <!-- 0-1 -->
+							<DescontoIncondicionado></DescontoIncondicionado>
+                        </Valores>
+                        <!-- 1-1 -->
+                        <ItemListaServico></ItemListaServico>
+                        <!-- 0-1 -->
+                        <CodigoCnae></CodigoCnae>
+                        <!-- 0-1 -->
+                        <CodigoTributacaoMunicipio></CodigoTributacaoMunicipio>
+                        <!-- 1-1 -->
+                        <Discriminacao></Discriminacao>
+                        <!-- 1-1 -->
+                        <CodigoMunicipio></CodigoMunicipio>
+                    </Servico>
+                    <!-- 1-1 -->
+                    <Prestador>
+                        <!-- 1-1 -->
+                        <Cnpj></Cnpj>
+                        <!-- 0-1 -->
+                        <InscricaoMunicipal></InscricaoMunicipal>
+                    </Prestador>
+                    <!-- 1-1 -->
+                    <Tomador>
+                        <!-- 0-1 -->
+                        <IdentificacaoTomador>
+                            <!-- 0-1 -->
+                            <CpfCnpj>
+                                <!-- 1-1 -->
+                                <Cpf></Cpf>
+                                <!-- ou -->
+                                <Cnpj></Cnpj>
+                            </CpfCnpj>
+                            <!-- 0-1 -->
+                            <InscricaoMunicipal></InscricaoMunicipal>
+                            <!-- 0-1 -->
+                            <InscricaoEstadual></InscricaoEstadual>
+                        </IdentificacaoTomador>
+                        <!-- 0-1 -->
+                        <RazaoSocial></RazaoSocial>
+                        <!-- 0-1 -->
+                        <Endereco>
+                            <!-- 0-1 -->
+                            <Endereco></Endereco>
+                            <!-- 0-1 -->
+                            <Numero></Numero>
+                            <!-- 0-1 -->
+                            <Complemento></Complemento>
+                            <!-- 0-1 -->
+                            <Bairro></Bairro>
+                            <!-- 0-1 -->
+                            <CodigoMunicipio></CodigoMunicipio>
+                            <!-- 0-1 -->
+                            <Uf></Uf>
+                            <!-- 0-1 -->
+                            <Cep></Cep>
+                        </Endereco>
+                        <!-- 0-1 -->
+                        <Contato>
+                            <!-- 0-1 -->
+                            <Telefone></Telefone>
+                            <!-- 0-1 -->
+                            <Email></Email>
+                        </Contato>
+                    </Tomador>
+                    <!-- 0-1 -->
+                    <IntermediarioServico>
+                        <!-- 1-1 -->
+                        <RazaoSocial></RazaoSocial>
+                        <!-- 1-1 -->
+                        <CpfCnpj>
+                            <!-- 1-1 -->
+                            <Cpf></Cpf>
+                            <!-- ou -->
+                            <Cnpj></Cnpj>
+                        </CpfCnpj>
+                        <!-- 0-1 -->
+                        <InscricaoMunicipal></InscricaoMunicipal>
+                    </IntermediarioServico>
+                    <!-- 0-1 -->
+                    <ConstrucaoCivil>
+                        <!-- 1-1 -->
+                        <CodigoObra></CodigoObra>
+                        <!-- 1-1 -->
+                        <Art></Art>
+                    </ConstrucaoCivil>
+                    <!-- 0-1 -->
+                    <OutrasInformacoes></OutrasInformacoes>
+                    <!-- 0-N -->
+                    <CondicaoPagamento>
+                        <!-- 0-1 -->
+                        <Condicao></Condicao>
+                        <!-- 0-1 -->
+                        <QtdParcela></QtdParcela>
+                        <!-- 0-1 -->
+                        <Parcelas>
+                            <!-- 0-1 -->
+                            <Parcela></Parcela>
+                            <!-- 0-1 -->
+                            <DataVencimento></DataVencimento>
+                            <!-- 0-1 -->
+                            <Valor></Valor>
+                        </Parcelas>
+                    </CondicaoPagamento>
+                </Rps>
+                <Signature/>
+            </Rps>
+        </ListaRps>
+    </LoteRps>
+</EnviarLoteRpsEnvio>

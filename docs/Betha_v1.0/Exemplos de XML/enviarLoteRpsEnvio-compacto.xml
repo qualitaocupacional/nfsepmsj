@@ -1,0 +1,89 @@
+<EnviarLoteRpsEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+    <!-- 1-1 -->
+    <LoteRps>
+        <!-- 1-1 -->
+        <NumeroLote></NumeroLote>
+        <!-- 1-1 -->
+        <Cnpj></Cnpj>
+        <!-- 1-1 -->
+        <InscricaoMunicipal></InscricaoMunicipal>
+        <!-- 1-1 -->
+        <QuantidadeRps></QuantidadeRps>
+        <!-- 1-1 -->
+        <ListaRps>
+            <!-- 1-N -->
+            <Rps>
+                <!-- 1-1 -->
+                <InfRps Id="">
+                    <!-- 1-1 -->
+                    <IdentificacaoRps>
+                        <!-- 1-1 -->
+                        <Numero></Numero>
+                        <!-- 1-1 -->
+                        <Serie></Serie>
+                        <!-- 1-1 -->
+                        <Tipo></Tipo>
+                    </IdentificacaoRps>
+                    <!-- 1-1 -->
+                    <DataEmissao></DataEmissao>
+                    <!-- 1-1 -->
+                    <NaturezaOperacao></NaturezaOperacao>
+                    <!-- 1-1 -->
+                    <OptanteSimplesNacional></OptanteSimplesNacional>
+                    <!-- 1-1 -->
+                    <IncentivadorCultural></IncentivadorCultural>
+                    <!-- 1-1 -->
+                    <Status></Status>
+                    <!-- 1-1 -->
+                    <Servico>
+                        <!-- 1-1 -->
+                        <Valores>
+                            <!-- 1-1 -->
+							<ValorServicos></ValorServicos>
+                            <!-- 1-1 -->
+                            <IssRetido></IssRetido>
+                            <!-- 1-1 -->
+                            <BaseCalculo></BaseCalculo>
+                        </Valores>
+                        <!-- 1-1 -->
+                        <ItemListaServico></ItemListaServico>
+                        <!-- 1-1 -->
+                        <Discriminacao></Discriminacao>
+                        <!-- 1-1 -->
+                        <CodigoMunicipio></CodigoMunicipio>
+                    </Servico>
+                    <!-- 1-1 -->
+                    <Prestador>
+                        <!-- 1-1 -->
+                        <Cnpj></Cnpj>
+                        <!-- 0-1 -->
+                        <InscricaoMunicipal></InscricaoMunicipal>
+                    </Prestador>
+                    <!-- 1-1 -->
+                    <Tomador>
+                        <!-- 0-1 -->
+                        <IdentificacaoTomador>
+                            <!-- 0-1 -->
+                            <CpfCnpj>
+                                <!-- 1-1 -->
+                                <Cpf></Cpf>
+                                <!-- ou -->
+                                <Cnpj></Cnpj>
+                            </CpfCnpj>
+                        </IdentificacaoTomador>
+                        <!-- 0-1 -->
+                        <RazaoSocial></RazaoSocial>
+                        <!-- 0-1 -->
+                        <Contato>
+                            <!-- 0-1 -->
+                            <Telefone></Telefone>
+                            <!-- 0-1 -->
+                            <Email></Email>
+                        </Contato>
+                    </Tomador>
+                </Rps>
+                <Signature/>
+            </Rps>
+        </ListaRps>
+    </LoteRps>
+</EnviarLoteRpsEnvio>
