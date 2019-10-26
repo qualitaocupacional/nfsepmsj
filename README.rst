@@ -33,12 +33,12 @@ Usando
 
 .. code:: python
 
-    from nfsepmsj.client import NFSe
+    from nfsepmsj.client import NFSeAbrasf
 
     pfx_file = '/caminho/do/arquivo.pfx'
     pfx_passwd = 'Senha do arquivo pfx'
 
-    nfse = NFSe(pfx_file, pfx_passwd)
+    nfse = NFSeAbrasf(pfx_file, pfx_passwd)
     nf_data = {
         'rps.lote.id': 'loteid',
         'nf.data.emissao': 'AAAA-MM-DD',
@@ -71,6 +71,15 @@ E *errors*, se houver algum, como, por exemplo, erro de validação do XML, vai 
             'error': 'a mensagem do erro'
         }
     ]
+
+Para utilizar o ambiente de **Testes** ao invés do de **Produção**:
+
+.. code:: python
+
+    from nfsepmsj.client import NFSeAbrasf
+
+    nfse = NFSeAbrasf(pfx_file, pfx_passwd, 'test')
+    # ...
 
 Estrutura do dicionário com os campos da nota fiscal:
 
@@ -213,12 +222,12 @@ Sendo que os códigos **3** e **5** são de uso restrito da Administração Trib
 
 .. code:: python
 
-    from nfsepmsj.client import NFSe
+    from nfsepmsj.client import NFSeAbrasf
 
     pfx_file = '/caminho/do/arquivo.pfx'
     pfx_passwd = 'Senha do arquivo pfx'
 
-    nfse = NFSe(pfx_file, pfx_passwd)
+    nfse = NFSeAbrasf(pfx_file, pfx_passwd)
     cancel_data = {
         'nf.cancela.id': 'cancel_id1',
         'nf.codigo_cancelamento': '1',
@@ -281,12 +290,12 @@ Lembrando que nesta modalidade os dados de RPS devem conter os campos:
 
 .. code:: python
 
-    from nfsepmsj.client import NFSe
+    from nfsepmsj.client import NFSeAbrasf
 
     pfx_file = '/caminho/do/arquivo.pfx'
     pfx_passwd = 'Senha do arquivo pfx'
 
-    nfse = NFSe(pfx_file, pfx_passwd)
+    nfse = NFSeAbrasf(pfx_file, pfx_passwd)
     # ...
 
     nfse.add_rps(rps01_data)
