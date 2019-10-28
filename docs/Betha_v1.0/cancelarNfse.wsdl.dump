@@ -1,0 +1,101 @@
+
+Prefixes:
+     ns0: http://www.w3.org/2000/09/xmldsig#
+     ns1: http://www.betha.com.br/e-nota-contribuinte-ws
+     xsd: http://www.w3.org/2001/XMLSchema
+
+Global elements:
+     ns1:CancelarNfseEnvio(ns1:CancelarNfseEnvio)
+     ns1:CancelarNfseEnvioResponse(ns1:CancelarNfseEnvioResponse)
+     ns0:CanonicalizationMethod(ns0:tcCanonicalizationMethod)
+     ns0:DigestMethod(ns0:tcDigestMethod)
+     ns0:DigestValue(xsd:string)
+     ns0:Reference(ns1:tcReference)
+     ns0:Signature(ns0:Signature)
+     ns0:SignatureMethod(ns0:tcSignatureMethod)
+     ns0:Transform(ns1:tcTransform)
+     ns0:Transforms(ns1:tcTransforms)
+     ns0:X509Data(ns0:tcX509Data)
+     ns0:tcCanonicalizationMethod(ns0:tcCanonicalizationMethod)
+     ns0:tcDigestMethod(ns0:tcDigestMethod)
+     ns0:tcSignatureMethod(ns0:tcSignatureMethod)
+     ns0:tcX509Data(ns0:tcX509Data)
+     
+
+Global types:
+     xsd:anyType
+     ns1:CancelarNfseEnvio(Pedido: ns1:tcPedidoCancelamento)
+     ns1:CancelarNfseEnvioResponse(CancelarNfseReposta: ns1:cancelarNfseResposta)
+     ns1:cancelarNfseResposta(({Cancelamento: ns1:tcCancelamentoNfse} | {ListaMensagemRetorno: ns1:tcListaMensagemRetorno})[])
+     ns1:tcCancelamentoNfse(Confirmacao: ns1:tcConfirmacaoCancelamento)
+     ns1:tcConfirmacaoCancelamento(Pedido: ns1:tcPedidoCancelamento, InfConfirmacaoCancelamento: ns1:tcInfConfirmacaoCancelamento, Id: xsd:string)
+     ns1:tcIdentificacaoNfse(Numero: xsd:string, Cnpj: xsd:string, InscricaoMunicipal: xsd:string, CodigoMunicipio: xsd:string)
+     ns1:tcInfConfirmacaoCancelamento(Sucesso: xsd:boolean, DataHora: xsd:dateTime)
+     ns1:tcInfPedidoCancelamento(IdentificacaoNfse: ns1:tcIdentificacaoNfse, CodigoCancelamento: xsd:string, Id: xsd:string)
+     ns1:tcKeyInfo(X509Data: ns0:tcX509Data)
+     ns1:tcListaMensagemRetorno(MensagemRetorno: ns1:tcMensagemRetorno[])
+     ns1:tcMensagemRetorno(Codigo: xsd:string, Mensagem: xsd:string, Correcao: xsd:string)
+     ns1:tcPedidoCancelamento(InfPedidoCancelamento: ns1:tcInfPedidoCancelamento, Signature: ns0:Signature)
+     ns1:tcReference(Transforms: ns1:tcTransforms, DigestMethod: ns0:tcDigestMethod, DigestValue: xsd:string, URI: xsd:string)
+     ns1:tcSigInfo(CanonicalizationMethod: ns0:tcCanonicalizationMethod, SignatureMethod: ns0:tcSignatureMethod, Reference: ns1:tcReference)
+     ns1:tcTransform(Algorithm: xsd:string)
+     ns1:tcTransforms(Transform: ns1:tcTransform[])
+     ns0:Signature(SignedInfo: ns1:tcSigInfo, SignatureValue: xsd:string, KeyInfo: ns1:tcKeyInfo)
+     ns0:tcCanonicalizationMethod(Algorithm: xsd:string)
+     ns0:tcDigestMethod(Algorithm: xsd:string)
+     ns0:tcSignatureMethod(Algorithm: xsd:string)
+     ns0:tcX509Data(X509Certificate: xsd:string)
+     xsd:ENTITIES
+     xsd:ENTITY
+     xsd:ID
+     xsd:IDREF
+     xsd:IDREFS
+     xsd:NCName
+     xsd:NMTOKEN
+     xsd:NMTOKENS
+     xsd:NOTATION
+     xsd:Name
+     xsd:QName
+     xsd:anySimpleType
+     xsd:anyURI
+     xsd:base64Binary
+     xsd:boolean
+     xsd:byte
+     xsd:date
+     xsd:dateTime
+     xsd:decimal
+     xsd:double
+     xsd:duration
+     xsd:float
+     xsd:gDay
+     xsd:gMonth
+     xsd:gMonthDay
+     xsd:gYear
+     xsd:gYearMonth
+     xsd:hexBinary
+     xsd:int
+     xsd:integer
+     xsd:language
+     xsd:long
+     xsd:negativeInteger
+     xsd:nonNegativeInteger
+     xsd:nonPositiveInteger
+     xsd:normalizedString
+     xsd:positiveInteger
+     xsd:short
+     xsd:string
+     xsd:time
+     xsd:token
+     xsd:unsignedByte
+     xsd:unsignedInt
+     xsd:unsignedLong
+     xsd:unsignedShort
+
+Bindings:
+     Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}CancelarNEV01Binding
+
+Service: CancelarNEV01Service
+     Port: CancelarNEV01Port (Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}CancelarNEV01Binding)
+         Operations:
+            CancelarNfseEnvio(Pedido: ns1:tcPedidoCancelamento) -> CancelarNfseReposta: ns1:cancelarNfseResposta
+

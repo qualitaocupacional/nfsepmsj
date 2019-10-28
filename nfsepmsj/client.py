@@ -26,7 +26,10 @@ from nfsepmsj.utils import pkcs12_data
 
 import xmltodict
 
-from zeep import Client
+from zeep import (
+    Client,
+    xsd
+)
 
 from lxml import etree
 
@@ -52,8 +55,8 @@ class BaseNFSe(object):
     def _validate_xml(self, xml_element):
         if not isinstance(xml_element, etree._ElementTree):
             xml_element = etree.ElementTree(xml_element)
-        xsd = xml.xsd_fromfile(self._xsd_file)
-        return xml.XMLValidate(xml_element, xsd)
+        _xsd = xml.xsd_fromfile(self._xsd_file)
+        return xml.XMLValidate(xml_element, _xsd)
 
     def _add_fields_nullable(self, xml_element, fields_data, fields, ns=None):
         '''Check nullable fields to add to XML tree.
@@ -68,6 +71,14 @@ class BaseNFSe(object):
             if fields.get(field_name):
                 xml.add_element(xml_element, xml_path, xml_tag, text=fields.get(field_name), ns=ns)
 
+    def _has_fields(self, start_key, fields_dict):
+        has_key = False
+        for key in fields_dict:
+            has_key = key.startswith(start_key)
+            if has_key:
+                break
+        return has_key
+
     def clear_rps_batch(self):
         del self.rps_batch
         self.rps_batch = []
@@ -75,6 +86,9 @@ class BaseNFSe(object):
     def clear_cancel_batch(self):
         del self.cancel_batch
         self.cancel_batch = []
+
+    def sign(self, xml_element, reference_uri=None):
+        return xml.sign(etree.ElementTree(xml_element), self.cert_data, reference_uri=reference_uri)
 
 
 class NFSeAbrasf(BaseNFSe):
@@ -237,11 +251,8 @@ class NFSeAbrasf(BaseNFSe):
 
     def add_rps(self, rps_fields):
         rps = self._gen_rps_xml(rps_fields)
-        rps_signed = xml.sign(etree.ElementTree(rps), self.cert_data, reference_uri=rps_fields.get('rps.lote.id'))
+        rps_signed = self.sign(etree.ElementTree(rps), reference_uri=rps_fields.get('rps.lote.id'))
         self.rps_batch.append(rps_signed)
-
-    def sign(self, xml_element, reference_uri=None):
-        return xml.sign(etree.ElementTree(xml_element), self.cert_data, reference_uri=reference_uri)
     
     def send(self):
         ws = self._connect(self.ws_url)
@@ -309,7 +320,7 @@ class NFSeAbrasf(BaseNFSe):
         batch_root = xml.create_root_element('EnviarLoteRpsSincronoEnvio', ns=self.nsmap)
         batch_root.append(lote_rps)
         # Sign
-        batch_signed = xml.sign(etree.ElementTree(batch_root), self.cert_data, reference_uri=batch_fields.get('lote.id'))
+        batch_signed = self.sign(etree.ElementTree(batch_root), reference_uri=batch_fields.get('lote.id'))
         xml_data = self._validate_xml(batch_signed)
         if xml_data.isvalid():
             batch_data = xml.dump_tostring(batch_signed, xml_declaration=False)
@@ -350,7 +361,7 @@ class NFSeAbrasf(BaseNFSe):
         xml.add_element(identif, None, 'CodigoMunicipio', text=nf_fields.get('nf.codigo_municipio'), ns=self.nsmap)
         if nf_fields.get('nf.codigo_cancelamento'):
             xml.add_element(inf_cancel, None, 'CodigoCancelamento', text=nf_fields.get('nf.codigo_cancelamento'), ns=self.nsmap)
-        cancel_signed = xml.sign(etree.ElementTree(pedido_root), self.cert_data, reference_uri=nf_fields.get('nf.cancela.id'))
+        cancel_signed = self.sign(etree.ElementTree(pedido_root), reference_uri=nf_fields.get('nf.cancela.id'))
         self.cancel_batch.append(cancel_signed)
 
     def cancel(self):
@@ -406,135 +417,138 @@ class NFSeBetha(BaseNFSe):
         url = self.ws_url.format(service=service)
         return self._connect(url)
     
-    def add_rps(self, rps_fields=None):
-        if rps_fields is not None:
-            rps_root = xml.create_root_element('Rps', ns=self.nsmap)
-            rps = xml.add_element(
-                rps_root,
-                None,
-                'InfRps',
-                Id=rps_fields.get('rps.lote.id'),
-                ns=self.nsmap
-            )
-            xml.add_element(rps, None, 'IdentificacaoRps', ns=self.nsmap)
-            xml.add_element(rps, 'IdentificacaoRps', 'Numero', text=rps_fields.get('rps.numero'), ns=self.nsmap)
-            xml.add_element(rps, 'IdentificacaoRps', 'Serie', text=rps_fields.get('rps.serie'), ns=self.nsmap)
-            xml.add_element(rps, 'IdentificacaoRps', 'Tipo', text=rps_fields.get('rps.tipo'), ns=self.nsmap)
-            xml.add_element(rps, None, 'DataEmissao', text=rps_fields.get('rps.data.emissao'), ns=self.nsmap)
-            xml.add_element(rps, None, 'NaturezaOperacao', text=rps_fields.get('nf.natureza_operacao'), ns=self.nsmap)
-            if rps_fields.get('nf.regime_especial_tributacao'):
-                xml.add_element(rps, None, 'RegimeEspecialTributacao', text=rps_fields['nf.regime_especial_tributacao'], ns=self.nsmap)
-            xml.add_element(rps, None, 'OptanteSimplesNacional', text=rps_fields.get('nf.optante_simples'), ns=self.nsmap)
-            xml.add_element(rps, None, 'IncentivadorCultural', text=rps_fields.get('nf.incentivo_fiscal'), ns=self.nsmap)
-            xml.add_element(rps, None, 'Status', text=rps_fields.get('rps.status'), ns=self.nsmap)
-            if rps_fields.get('rps.substituido.numero'):
-                xml.add_element(rps, None, 'RpsSubstituido', ns=self.nsmap)
-                xml.add_element(rps, 'RpsSubstituido', 'Numero', text=rps_fields.get('rps.substituido.numero'), ns=self.nsmap)
-                xml.add_element(rps, 'RpsSubstituido', 'Serie', text=rps_fields.get('rps.substituido.serie'), ns=self.nsmap)
-                xml.add_element(rps, 'RpsSubstituido', 'Tipo', text=rps_fields.get('rps.substituido.tipo'), ns=self.nsmap)
-            # Servicos
-            servicos = xml.add_element(rps, None, 'Servico', ns=self.nsmap)
-            xml.add_element(servicos, None, 'Valores', ns=self.nsmap)
-            xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_nota'), ns=self.nsmap)
+    def add_rps(self, rps_fields):
+        rps_root = xml.create_root_element('Rps', ns=self.nsmap)
+        rps = xml.add_element(
+            rps_root,
+            None,
+            'InfRps',
+            Id=rps_fields.get('rps.lote.id'),
+            ns=self.nsmap
+        )
+        xml.add_element(rps, None, 'IdentificacaoRps', ns=self.nsmap)
+        xml.add_element(rps, 'IdentificacaoRps', 'Numero', text=rps_fields.get('rps.numero'), ns=self.nsmap)
+        xml.add_element(rps, 'IdentificacaoRps', 'Serie', text=rps_fields.get('rps.serie'), ns=self.nsmap)
+        xml.add_element(rps, 'IdentificacaoRps', 'Tipo', text=rps_fields.get('rps.tipo'), ns=self.nsmap)
+        xml.add_element(rps, None, 'DataEmissao', text=rps_fields.get('rps.data.emissao'), ns=self.nsmap)
+        xml.add_element(rps, None, 'NaturezaOperacao', text=rps_fields.get('nf.natureza_operacao'), ns=self.nsmap)
+        if rps_fields.get('nf.regime_especial_tributacao'):
+            xml.add_element(rps, None, 'RegimeEspecialTributacao', text=rps_fields['nf.regime_especial_tributacao'], ns=self.nsmap)
+        xml.add_element(rps, None, 'OptanteSimplesNacional', text=rps_fields.get('nf.optante_simples'), ns=self.nsmap)
+        xml.add_element(rps, None, 'IncentivadorCultural', text=rps_fields.get('nf.incentivo_fiscal'), ns=self.nsmap)
+        xml.add_element(rps, None, 'Status', text=rps_fields.get('rps.status'), ns=self.nsmap)
+        if rps_fields.get('rps.substituido.numero'):
+            xml.add_element(rps, None, 'RpsSubstituido', ns=self.nsmap)
+            xml.add_element(rps, 'RpsSubstituido', 'Numero', text=rps_fields.get('rps.substituido.numero'), ns=self.nsmap)
+            xml.add_element(rps, 'RpsSubstituido', 'Serie', text=rps_fields.get('rps.substituido.serie'), ns=self.nsmap)
+            xml.add_element(rps, 'RpsSubstituido', 'Tipo', text=rps_fields.get('rps.substituido.tipo'), ns=self.nsmap)
+        # Servicos
+        servicos = xml.add_element(rps, None, 'Servico', ns=self.nsmap)
+        xml.add_element(servicos, None, 'Valores', ns=self.nsmap)
+        xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_nota'), ns=self.nsmap)
+        self._add_fields_nullable(
+            xml_element=servicos,
+            fields_data=(
+                ('nf.valor_deducoes', 'Valores', 'ValorDeducoes'),
+                ('nf.valor_pis', 'Valores', 'ValorPis'),
+                ('nf.valor_cofins', 'Valores', 'ValorCofins'),
+                ('nf.valor_inss', 'Valores', 'ValorInss'),
+                ('nf.valor_IR', 'Valores', 'ValorIr'),
+                ('nf.valor_csll', 'Valores', 'ValorCsll'),
+            ),
+            fields=rps_fields,
+            ns=self.nsmap
+        )
+        xml.add_element(servicos, 'Valores', 'IssRetido', text=rps_fields.get('nf.iss_retido'), ns=self.nsmap)
+        self._add_fields_nullable(
+            xml_element=servicos,
+            fields_data=(
+                ('nf.valor_iss', 'Valores', 'ValorIss'),
+                ('nf.valor_outros', 'Valores', 'OutrasRetencoes'),
+            ),
+            fields=rps_fields,
+            ns=self.nsmap
+        )
+        xml.add_element(servicos, 'Valores', 'BaseCalculo', text=rps_fields.get('nf.base_calculo'), ns=self.nsmap)
+        self._add_fields_nullable(
+            xml_element=servicos,
+            fields_data=(
+                ('nf.aliquota', 'Valores', 'Aliquota'),
+                ('nf.total_nota_liquido', 'Valores', 'ValorLiquidoNfse'),
+                ('nf.valor_iss_retido', 'Valores', 'ValorIssRetido'),
+                ('nf.desconto_condicionado', 'Valores', 'DescontoCondicionado'),
+                ('nf.desconto_incondicionado', 'Valores', 'DescontoIncondicionado'),
+            ),
+            fields=rps_fields,
+            ns=self.nsmap
+        )
+        xml.add_element(servicos, None, 'ItemListaServico', text=rps_fields.get('nf.codigo_servico'), ns=self.nsmap)
+        self._add_fields_nullable(
+            xml_element=servicos,
+            fields_data=(
+                ('nf.codigo_cnae', None, 'CodigoCnae'),
+                ('nf.codigo_tributacao_municipio', None, 'CodigoTributacaoMunicipio'),
+            ),
+            fields=rps_fields,
+            ns=self.nsmap
+        )
+        xml.add_element(servicos, None, 'Discriminacao', text=rps_fields.get('nf.discriminacao'), ns=self.nsmap)
+        xml.add_element(servicos, None, 'CodigoMunicipio', text=rps_fields.get('nf.codigo_municipio'), ns=self.nsmap)
+        xml.add_element(rps, None, 'Prestador', ns=self.nsmap)
+        xml.add_element(rps, 'Prestador', 'Cnpj', text=rps_fields.get('nf.prestador.documento'), ns=self.nsmap)
+        if rps_fields.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(rps, 'Prestador', 'InscricaoMunicipal', text=rps_fields['nf.prestador.inscricao_municipal'], ns=self.nsmap)
+        xml.add_element(rps, None, 'Tomador', ns=self.nsmap)
+        if rps_fields.get('nf.tomador.documento'):
+            xml.add_element(rps, 'Tomador', 'IdentificacaoTomador', ns=self.nsmap)
+            xml.add_element(rps, 'Tomador/IdentificacaoTomador', 'CpfCnpj', ns=self.nsmap)
+            if len(rps_fields.get('nf.tomador.documento')) == 11: #CPF
+                xml.add_element(rps, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cpf', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
+            else: #CNPJ
+                xml.add_element(rps, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cnpj', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
             self._add_fields_nullable(
-                xml_element=servicos,
+                xml_element=rps,
                 fields_data=(
-                    ('nf.valor_deducoes', 'Valores', 'ValorDeducoes'),
-                    ('nf.valor_pis', 'Valores', 'ValorPis'),
-                    ('nf.valor_cofins', 'Valores', 'ValorCofins'),
-                    ('nf.valor_inss', 'Valores', 'ValorInss'),
-                    ('nf.valor_IR', 'Valores', 'ValorIr'),
-                    ('nf.valor_csll', 'Valores', 'ValorCsll'),
+                    ('nf.tomador.inscricao_municipal', 'Tomador/IdentificacaoTomador', 'InscricaoMunicipal'),
+                    ('nf.tomador.inscricao_estadual', 'Tomador/IdentificacaoTomador', 'InscricaoEstadual'),
+                    ('nf.tomador.razao_social', 'Tomador', 'RazaoSocial'),
                 ),
                 fields=rps_fields,
                 ns=self.nsmap
             )
-            xml.add_element(servicos, 'Valores', 'IssRetido', text=rps_fields.get('nf.iss_retido'), ns=self.nsmap)
-            self._add_fields_nullable(
-                xml_element=servicos,
-                fields_data=(
-                    ('nf.valor_iss', 'Valores', 'ValorIss'),
-                    ('nf.valor_outros', 'Valores', 'OutrasRetencoes'),
-                ),
-                fields=rps_fields,
-                ns=self.nsmap
-            )
-            xml.add_element(servicos, 'Valores', 'BaseCalculo', text=rps_fields.get('nf.base_calculo'), ns=self.nsmap)
-            self._add_fields_nullable(
-                xml_element=servicos,
-                fields_data=(
-                    ('nf.aliquota', 'Valores', 'Aliquota'),
-                    ('nf.total_nota_liquido', 'Valores', 'ValorLiquidoNfse'),
-                    ('nf.valor_iss_retido', 'Valores', 'ValorIssRetido'),
-                    ('nf.desconto_condicionado', 'Valores', 'DescontoCondicionado'),
-                    ('nf.desconto_incondicionado', 'Valores', 'DescontoIncondicionado'),
-                ),
-                fields=rps_fields,
-                ns=self.nsmap
-            )
-            xml.add_element(servicos, None, 'ItemListaServico', text=rps_fields.get('nf.codigo_servico'), ns=self.nsmap)
-            self._add_fields_nullable(
-                xml_element=servicos,
-                fields_data=(
-                    ('nf.codigo_cnae', None, 'CodigoCnae'),
-                    ('nf.codigo_tributacao_municipio', None, 'CodigoTributacaoMunicipio'),
-                ),
-                fields=rps_fields,
-                ns=self.nsmap
-            )
-            xml.add_element(servicos, None, 'Discriminacao', text=rps_fields.get('nf.discriminacao'), ns=self.nsmap)
-            xml.add_element(servicos, None, 'CodigoMunicipio', text=rps_fields.get('nf.codigo_municipio'), ns=self.nsmap)
-            xml.add_element(rps, None, 'Prestador', ns=self.nsmap)
-            xml.add_element(rps, 'Prestador', 'Cnpj', text=rps_fields.get('nf.prestador.documento'), ns=self.nsmap)
-            if rps_fields.get('nf.prestador.inscricao_municipal'):
-                xml.add_element(rps, 'Prestador', 'InscricaoMunicipal', text=rps_fields['nf.prestador.inscricao_municipal'], ns=self.nsmap)
-            xml.add_element(rps, None, 'Tomador', ns=self.nsmap)
-            if rps_fields.get('nf.tomador.documento'):
-                xml.add_element(rps, 'Tomador', 'IdentificacaoTomador', ns=self.nsmap)
-                xml.add_element(rps, 'Tomador/IdentificacaoTomador', 'CpfCnpj', ns=self.nsmap)
-                if len(rps_fields.get('nf.tomador.documento')) == 11: #CPF
-                    xml.add_element(rps, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cpf', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
-                else: #CNPJ
-                    xml.add_element(rps, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cnpj', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
+            if rps_fields.get('nf.tomador.logradouro'):
+                xml.add_element(rps, 'Tomador', 'Endereco', ns=self.nsmap)
                 self._add_fields_nullable(
                     xml_element=rps,
                     fields_data=(
-                        ('nf.tomador.inscricao_municipal', 'Tomador/IdentificacaoTomador', 'InscricaoMunicipal'),
-                        ('nf.tomador.inscricao_estadual', 'Tomador/IdentificacaoTomador', 'InscricaoEstadual'),
-                        ('nf.tomador.razao_social', 'Tomador', 'RazaoSocial'),
+                        ('nf.tomador.logradouro', 'Tomador/Endereco', 'Endereco'),
+                        ('nf.tomador.numero_logradouro', 'Tomador/Endereco', 'Numero'),
+                        ('nf.tomador.complemento', 'Tomador/Endereco', 'Complemento'),
+                        ('nf.tomador.bairro', 'Tomador/Endereco', 'Bairro'),
+                        ('nf.tomador.codigo_municipio', 'Tomador/Endereco', 'CodigoMunicipio'),
+                        ('nf.tomador.uf', 'Tomador/Endereco', 'Uf'),
+                        ('nf.tomador.cep', 'Tomador/Endereco', 'Cep'),
                     ),
                     fields=rps_fields,
                     ns=self.nsmap
                 )
-                if rps_fields.get('nf.tomador.logradouro'):
-                    xml.add_element(rps, 'Tomador', 'Endereco', ns=self.nsmap)
-                    self._add_fields_nullable(
-                        xml_element=rps,
-                        fields_data=(
-                            ('nf.tomador.logradouro', 'Tomador/Endereco', 'Endereco'),
-                            ('nf.tomador.numero_logradouro', 'Tomador/Endereco', 'Numero'),
-                            ('nf.tomador.complemento', 'Tomador/Endereco', 'Complemento'),
-                            ('nf.tomador.bairro', 'Tomador/Endereco', 'Bairro'),
-                            ('nf.tomador.codigo_municipio', 'Tomador/Endereco', 'CodigoMunicipio'),
-                            ('nf.tomador.uf', 'Tomador/Endereco', 'Uf'),
-                            ('nf.tomador.cep', 'Tomador/Endereco', 'Cep'),
-                        ),
-                        fields=rps_fields,
-                        ns=self.nsmap
-                    )
-                if rps_fields.get('nf.tomador.contato.telefone') or rps_fields.get('nf.tomador.contato.email'):
-                    xml.add_element(rps, 'Tomador', 'Contato')
-                    self._add_fields_nullable(
-                        xml_element=rps,
-                        fields_data=(
-                            ('nf.tomador.contato.telefone', 'Tomador/Contato', 'Telefone'),
-                            ('nf.tomador.contato.email', 'Tomador/Contato', 'Email'),
-                        ),
-                        fields=rps_fields,
-                        ns=self.nsmap
-                    )
-            rps_signed = xml.sign(etree.ElementTree(rps_root), self.cert_data, reference_uri=rps_fields.get('rps.lote.id'))
-            self.rps_batch.append(rps_signed)
+            if rps_fields.get('nf.tomador.contato.telefone') or rps_fields.get('nf.tomador.contato.email'):
+                xml.add_element(rps, 'Tomador', 'Contato')
+                self._add_fields_nullable(
+                    xml_element=rps,
+                    fields_data=(
+                        ('nf.tomador.contato.telefone', 'Tomador/Contato', 'Telefone'),
+                        ('nf.tomador.contato.email', 'Tomador/Contato', 'Email'),
+                    ),
+                    fields=rps_fields,
+                    ns=self.nsmap
+                )
+        # Intermediario
+
+        # Construcao Civil
+
+        rps_signed = self.sign(etree.ElementTree(rps_root), reference_uri=rps_fields.get('rps.lote.id'))
+        self.rps_batch.append(rps_signed)
 
     def send_batch(self, batch_fields):
         result = {}
@@ -576,7 +590,7 @@ class NFSeBetha(BaseNFSe):
             }
         return (result, errors)
 
-    def search_batch_status(self, batch_fields):
+    def get_batch_status(self, batch_fields):
         prestador = OrderedDict([
             ('Cnpj', batch_fields.get('nf.prestador.documento'))
         ])
@@ -590,3 +604,76 @@ class NFSeBetha(BaseNFSe):
         del ws
         return result
     
+    def get_nfse_by_rps(self, params, raw_response=False):
+        prestador = OrderedDict([
+            ('Cnpj', params.get('nf.prestador.documento'))
+        ])
+        if params.get('nf.prestador.inscricao_municipal'):
+            prestador['InscricaoMunicipal'] = params['nf.prestador.inscricao_municipal']
+        rps = OrderedDict([
+            ('Numero', params.get('rps.numero')),
+            ('Serie', params.get('rps.serie')),
+            ('Tipo', params.get('rps.tipo')),
+        ])
+        ws = self.connect('consultarNfsePorRpsV110')
+        # The XML response is invalid according their own XSD (!?!?!), so setting the request do not apply validation on response
+        with ws.settings(strict=False, raw_response=raw_response):
+            ws_result = ws.service.ConsultarNfsePorRpsEnvio(rps, prestador)
+        result = {
+            'ws.response': ws_result
+        }
+        del ws
+        return result
+
+    def get_nfse(self, params, raw_response=False):
+        prestador = OrderedDict([
+            ('Cnpj', params.get('nf.prestador.documento'))
+        ])
+        if params.get('nf.prestador.inscricao_municipal'):
+            prestador['InscricaoMunicipal'] = params['nf.prestador.inscricao_municipal']
+        numero_nfse = xsd.SkipValue
+        if params.get('nf.numero'):
+            numero_nfse = params['nf.numero']
+        periodo_emissao = xsd.SkipValue
+        if params.get('nf.data.inicial') and params.get('nf.data.final'):
+            periodo_emissao = OrderedDict([
+                ('DataInicial', params['nf.data.inicial']),
+                ('DataFinal', params['nf.data.final']),
+            ])
+        tomador = xsd.SkipValue
+        # Tomador fields
+        has_fields = self._has_fields('nf.tomador.', params)
+        if has_fields:
+            tomador = OrderedDict()
+            if params.get('nf.tomador.documento'):
+                if len(params['nf.tomador.documento']) == 11:
+                    tomador['CpfCnpj'] = {'Cpf': params['nf.tomador.documento']}
+                else:
+                    tomador['CpfCnpj'] = {'Cnpj': params['nf.tomador.documento']}
+            if params.get('nf.tomador.inscricao_municipal'):
+                tomador['InscricaoMnunicipal'] = params['nf.tomador.inscricao_municipal']
+            if params.get('nf.tomador.inscricao_estadual'):
+                tomador['InscricaoEstadual'] = params['nf.tomador.inscricao_estadual']
+        # Intermediario fields
+        intermediario_servico = xsd.SkipValue
+        has_fields = self._has_fields('nf.intermediario.', params)
+        if has_fields:
+            intermediario_servico = OrderedDict([
+                ('RazaoSocial', params['nf.intermediario.razao_social']),
+            ])
+            if len(params['nf.intermediario.documento']) == 11:
+                intermediario_servico['CpfCnpj'] = {'Cpf': params['nf.intermediario.documento']}
+            else:
+                intermediario_servico['CpfCnpj'] = {'Cnpj': params['nf.intermediario.documento']}
+            if params.get('nf.intermediario.inscricao_municipal'):
+                intermediario_servico['InscricaoMunicipal'] = params['nf.intermediario.inscricao_municipal']
+        ws = self.connect('consultarNfseV110')
+        # The XML response is invalid according their own XSD (!?!?!), so setting the request do not apply validation on response
+        with ws.settings(strict=False, raw_response=raw_response):
+            ws_result = ws.service.ConsultarNfseEnvio(prestador, numero_nfse, periodo_emissao, tomador, intermediario_servico)
+        result = {
+            'ws.response': ws_result
+        }
+        del ws
+        return result
+        

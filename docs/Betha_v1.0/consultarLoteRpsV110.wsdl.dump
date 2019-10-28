@@ -1,0 +1,123 @@
+
+Prefixes:
+     ns0: http://www.w3.org/2000/09/xmldsig#
+     ns1: http://www.betha.com.br/e-nota-contribuinte-ws
+     xsd: http://www.w3.org/2001/XMLSchema
+
+Global elements:
+     ns1:ConsultarLoteRpsEnvio(ns1:ConsultarLoteRpsEnvio)
+     ns1:ConsultarLoteRpsEnvioResponse(ns1:ConsultarLoteRpsEnvioResponse)
+     ns1:ConsultarNfseResposta(ns1:consultarNotaRespV110)
+     ns0:CanonicalizationMethod(ns0:tcCanonicalizationMethod)
+     ns0:DigestMethod(ns0:tcDigestMethod)
+     ns0:DigestValue(xsd:string)
+     ns0:Reference(ns1:tcReference)
+     ns0:Signature(ns0:Signature)
+     ns0:SignatureMethod(ns0:tcSignatureMethod)
+     ns0:Transform(ns1:tcTransform)
+     ns0:Transforms(ns1:tcTransforms)
+     ns0:X509Data(ns0:tcX509Data)
+     ns0:tcCanonicalizationMethod(ns0:tcCanonicalizationMethod)
+     ns0:tcDigestMethod(ns0:tcDigestMethod)
+     ns0:tcSignatureMethod(ns0:tcSignatureMethod)
+     ns0:tcX509Data(ns0:tcX509Data)
+     
+
+Global types:
+     xsd:anyType
+     ns1:ConsultarLoteRpsEnvio(Prestador: ns1:tcIdentificacaoPrestador, Protocolo: xsd:long)
+     ns1:ConsultarLoteRpsEnvioResponse(ConsultarNotaRespV110: ns1:consultarNotaRespV110)
+     ns1:consultarNotaRespV110(ListaNfse: ns1:tcListaNfseV110, ListaMensagemRetorno: ns1:tcListaMensagemRetorno)
+     ns1:tcCancelamentoNfse(Confirmacao: ns1:tcConfirmacaoCancelamento)
+     ns1:tcCompNfseV110(Nfse: ns1:tcNfseV110, NfseCancelamento: ns1:tcCancelamentoNfse, NfseSubstituicao: ns1:tcSubstituicaoNfse)
+     ns1:tcConfirmacaoCancelamento(Pedido: ns1:tcPedidoCancelamento, InfConfirmacaoCancelamento: ns1:tcInfConfirmacaoCancelamento, Id: xsd:string)
+     ns1:tcContato(Telefone: xsd:string, Email: xsd:string)
+     ns1:tcCpfCnpj(Cnpj: xsd:string, Cpf: xsd:string)
+     ns1:tcDadosConstrucaoCivil(CodigoObra: xsd:string, Art: xsd:string)
+     ns1:tcDadosPrestador(IdentificacaoPrestador: ns1:tcIdentificacaoPrestador, RazaoSocial: xsd:string, NomeFantasia: xsd:string, Endereco: ns1:tcEndereco, Contato: ns1:tcContato)
+     ns1:tcDadosServico(Valores: ns1:tcValores, ItemListaServico: xsd:string, CodigoCnae: xsd:string, CodigoTributacaoMunicipio: xsd:string, Discriminacao: xsd:string, CodigoMunicipio: xsd:int, CodigoPais: xsd:string)
+     ns1:tcDadosTomador(IdentificacaoTomador: ns1:tcIdentificacaoTomador, RazaoSocial: xsd:string, Endereco: ns1:tcEndereco, Contato: ns1:tcContato)
+     ns1:tcEndereco(Endereco: xsd:string, Numero: xsd:string, Complemento: xsd:string, Bairro: xsd:string, CodigoMunicipio: xsd:int, Uf: xsd:string, CodigoPais: xsd:string, Cep: xsd:string)
+     ns1:tcIdentificacaoCondicoesPagamentos(Condicao: xsd:int, QtdParcela: xsd:int, Parcelas: ns1:tcIdentificacaoParcelas[])
+     ns1:tcIdentificacaoIntermediarioServico(RazaoSocial: xsd:string, CpfCnpj: ns1:tcCpfCnpj, InscricaoMunicipal: xsd:string)
+     ns1:tcIdentificacaoNfse(Numero: xsd:string, Cnpj: xsd:string, InscricaoMunicipal: xsd:string, CodigoMunicipio: xsd:string)
+     ns1:tcIdentificacaoOrgaoGerador(CodigoMunicipio: xsd:int, Uf: xsd:string)
+     ns1:tcIdentificacaoParcelas(Parcela: xsd:int, DataVencimento: xsd:dateTime, Valor: xsd:decimal)
+     ns1:tcIdentificacaoPrestador(Cnpj: xsd:string, InscricaoMunicipal: xsd:string)
+     ns1:tcIdentificacaoRps(Numero: xsd:string, Serie: xsd:string, Tipo: xsd:int)
+     ns1:tcIdentificacaoTomador(CpfCnpj: ns1:tcCpfCnpj, InscricaoMunicipal: xsd:string, InscricaoEstadual: xsd:string)
+     ns1:tcInfConfirmacaoCancelamento(Sucesso: xsd:boolean, DataHora: xsd:dateTime)
+     ns1:tcInfNfseV110(Numero: xsd:string, CodigoVerificacao: xsd:string, DataEmissao: xsd:dateTime, IdentificacaoRps: ns1:tcIdentificacaoRps, DataEmissaoRps: xsd:dateTime, NaturezaOperacao: xsd:int, RegimeEspecialTributacao: xsd:int, OptanteSimplesNacional: xsd:int, IncentivadorCultural: xsd:int, Competencia: xsd:dateTime, NfseSubstituta: xsd:string, OutrasInformacoes: xsd:string, Servico: ns1:tcDadosServico, ValorCredito: xsd:decimal, PrestadorServico: ns1:tcDadosPrestador, TomadorServico: ns1:tcDadosTomador, IntermediarioServico: ns1:tcIdentificacaoIntermediarioServico, OrgaoGerador: ns1:tcIdentificacaoOrgaoGerador, ConstrucaoCivil: ns1:tcDadosConstrucaoCivil, CondicaoPagamento: ns1:tcIdentificacaoCondicoesPagamentos, id: xsd:string)
+     ns1:tcInfPedidoCancelamento(IdentificacaoNfse: ns1:tcIdentificacaoNfse, CodigoCancelamento: xsd:string, Id: xsd:string)
+     ns1:tcInfSubstituicaoNfse(NfseSubstituidora: xsd:string, Id: xsd:string)
+     ns1:tcKeyInfo(X509Data: ns0:tcX509Data)
+     ns1:tcListaMensagemRetorno(MensagemRetorno: ns1:tcMensagemRetorno[])
+     ns1:tcListaNfseV110(ComplNfse: ns1:tcCompNfseV110[])
+     ns1:tcMensagemRetorno(Codigo: xsd:string, Mensagem: xsd:string, Correcao: xsd:string)
+     ns1:tcNfseV110(InfNfse: ns1:tcInfNfseV110)
+     ns1:tcPedidoCancelamento(InfPedidoCancelamento: ns1:tcInfPedidoCancelamento, Signature: ns0:Signature)
+     ns1:tcReference(Transforms: ns1:tcTransforms, DigestMethod: ns0:tcDigestMethod, DigestValue: xsd:string, URI: xsd:string)
+     ns1:tcSigInfo(CanonicalizationMethod: ns0:tcCanonicalizationMethod, SignatureMethod: ns0:tcSignatureMethod, Reference: ns1:tcReference)
+     ns1:tcSubstituicaoNfse(SubstituicaoNfse: ns1:tcInfSubstituicaoNfse)
+     ns1:tcTransform(Algorithm: xsd:string)
+     ns1:tcTransforms(Transform: ns1:tcTransform[])
+     ns1:tcValores(ValorServicos: xsd:decimal, ValorDeducoes: xsd:decimal, ValorPis: xsd:decimal, ValorCofins: xsd:decimal, ValorInss: xsd:decimal, ValorIr: xsd:decimal, ValorCsll: xsd:decimal, IssRetido: xsd:int, ValorIss: xsd:decimal, OutrasRetencoes: xsd:decimal, BaseCalculo: xsd:decimal, Aliquota: xsd:decimal, ValorLiquidoNfse: xsd:decimal, ValorIssRetido: xsd:decimal, DescontoCondicionado: xsd:decimal, DescontoIncondicionado: xsd:decimal)
+     ns0:Signature(SignedInfo: ns1:tcSigInfo, SignatureValue: xsd:string, KeyInfo: ns1:tcKeyInfo)
+     ns0:tcCanonicalizationMethod(Algorithm: xsd:string)
+     ns0:tcDigestMethod(Algorithm: xsd:string)
+     ns0:tcSignatureMethod(Algorithm: xsd:string)
+     ns0:tcX509Data(X509Certificate: xsd:string)
+     xsd:ENTITIES
+     xsd:ENTITY
+     xsd:ID
+     xsd:IDREF
+     xsd:IDREFS
+     xsd:NCName
+     xsd:NMTOKEN
+     xsd:NMTOKENS
+     xsd:NOTATION
+     xsd:Name
+     xsd:QName
+     xsd:anySimpleType
+     xsd:anyURI
+     xsd:base64Binary
+     xsd:boolean
+     xsd:byte
+     xsd:date
+     xsd:dateTime
+     xsd:decimal
+     xsd:double
+     xsd:duration
+     xsd:float
+     xsd:gDay
+     xsd:gMonth
+     xsd:gMonthDay
+     xsd:gYear
+     xsd:gYearMonth
+     xsd:hexBinary
+     xsd:int
+     xsd:integer
+     xsd:language
+     xsd:long
+     xsd:negativeInteger
+     xsd:nonNegativeInteger
+     xsd:nonPositiveInteger
+     xsd:normalizedString
+     xsd:positiveInteger
+     xsd:short
+     xsd:string
+     xsd:time
+     xsd:token
+     xsd:unsignedByte
+     xsd:unsignedInt
+     xsd:unsignedLong
+     xsd:unsignedShort
+
+Bindings:
+     Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}ConsultarLoteRpsV110Binding
+
+Service: ConsultarLoteRpsV110Service
+     Port: ConsultarLoteRpsV110Port (Soap11Binding: {http://www.betha.com.br/e-nota-contribuinte-ws}ConsultarLoteRpsV110Binding)
+         Operations:
+            ConsultarLoteRpsEnvio(Prestador: ns1:tcIdentificacaoPrestador, Protocolo: xsd:long) -> ConsultarNotaRespV110: ns1:consultarNotaRespV110
+
