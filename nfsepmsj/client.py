@@ -251,7 +251,7 @@ class NFSeAbrasf(BaseNFSe):
 
     def add_rps(self, rps_fields):
         rps = self._gen_rps_xml(rps_fields)
-        rps_signed = self.sign(etree.ElementTree(rps), reference_uri=rps_fields.get('rps.lote.id'))
+        rps_signed = self.sign(rps, reference_uri=rps_fields.get('rps.lote.id'))
         self.rps_batch.append(rps_signed)
     
     def send(self):
@@ -320,7 +320,7 @@ class NFSeAbrasf(BaseNFSe):
         batch_root = xml.create_root_element('EnviarLoteRpsSincronoEnvio', ns=self.nsmap)
         batch_root.append(lote_rps)
         # Sign
-        batch_signed = self.sign(etree.ElementTree(batch_root), reference_uri=batch_fields.get('lote.id'))
+        batch_signed = self.sign(batch_root, reference_uri=batch_fields.get('lote.id'))
         xml_data = self._validate_xml(batch_signed)
         if xml_data.isvalid():
             batch_data = xml.dump_tostring(batch_signed, xml_declaration=False)
@@ -361,7 +361,7 @@ class NFSeAbrasf(BaseNFSe):
         xml.add_element(identif, None, 'CodigoMunicipio', text=nf_fields.get('nf.codigo_municipio'), ns=self.nsmap)
         if nf_fields.get('nf.codigo_cancelamento'):
             xml.add_element(inf_cancel, None, 'CodigoCancelamento', text=nf_fields.get('nf.codigo_cancelamento'), ns=self.nsmap)
-        cancel_signed = self.sign(etree.ElementTree(pedido_root), reference_uri=nf_fields.get('nf.cancela.id'))
+        cancel_signed = self.sign(pedido_root, reference_uri=nf_fields.get('nf.cancela.id'))
         self.cancel_batch.append(cancel_signed)
 
     def cancel(self):
@@ -547,7 +547,7 @@ class NFSeBetha(BaseNFSe):
 
         # Construcao Civil
 
-        rps_signed = self.sign(etree.ElementTree(rps_root), reference_uri=rps_fields.get('rps.lote.id'))
+        rps_signed = self.sign(rps_root, reference_uri=rps_fields.get('rps.lote.id'))
         self.rps_batch.append(rps_signed)
 
     def send_batch(self, batch_fields):
@@ -591,6 +591,22 @@ class NFSeBetha(BaseNFSe):
         return (result, errors)
 
     def get_batch_status(self, batch_fields):
+        # About response:
+        # Field "Situacao":
+        #   1 - Nao Recebido
+        #   2 - Nao Processado
+        #   3 - Processado com Erro
+        #   4 - Processado com Sucesso
+        # However, if batch had errors, "Situacao" is None (???), and the presence of "ListaMensagemRetorno" will tell that:
+        # ListaMensagemRetorno: {
+        #   MensagemRetorno: [
+        #        {
+        #            Codigo: 'error code',
+        #            Mensagem: 'error message',
+        #            Correcao: 'sometimes usefull'
+        #        }
+        #   ]
+        # }
         prestador = OrderedDict([
             ('Cnpj', batch_fields.get('nf.prestador.documento'))
         ])
@@ -676,4 +692,3 @@ class NFSeBetha(BaseNFSe):
         }
         del ws
         return result
-        
