@@ -253,6 +253,7 @@ class NFSeAbrasf(BaseNFSe):
         rps = self._gen_rps_xml(rps_fields)
         rps_signed = self.sign(rps, reference_uri=rps_fields.get('rps.lote.id'))
         self.rps_batch.append(rps_signed)
+        return rps_signed
     
     def send(self):
         ws = self._connect(self.ws_url)
@@ -363,6 +364,7 @@ class NFSeAbrasf(BaseNFSe):
             xml.add_element(inf_cancel, None, 'CodigoCancelamento', text=nf_fields.get('nf.codigo_cancelamento'), ns=self.nsmap)
         cancel_signed = self.sign(pedido_root, reference_uri=nf_fields.get('nf.cancela.id'))
         self.cancel_batch.append(cancel_signed)
+        return cancel_signed
 
     def cancel(self):
         result = []
@@ -418,12 +420,18 @@ class NFSeBetha(BaseNFSe):
         return self._connect(url)
     
     def add_rps(self, rps_fields):
+        rps_id = 'Rps{}{}{}{}'.format(
+            rps_fields.get('nf.codigo_municipio'),
+            rps_fields.get('rps.numero').rjust(15, '0'),
+            rps_fields.get('nf.prestador.documento'),
+            datetime.datetime.strptime(rps_fields.get('rps.data.emissao'), '%Y-%m-%dT%H:%M:%S').strftime('%d%m%Y')
+        )
         rps_root = xml.create_root_element('Rps', ns=self.nsmap)
         rps = xml.add_element(
             rps_root,
             None,
             'InfRps',
-            Id=rps_fields.get('rps.lote.id'),
+            Id=rps_id,
             ns=self.nsmap
         )
         xml.add_element(rps, None, 'IdentificacaoRps', ns=self.nsmap)
@@ -547,8 +555,9 @@ class NFSeBetha(BaseNFSe):
 
         # Construcao Civil
 
-        rps_signed = self.sign(rps_root, reference_uri=rps_fields.get('rps.lote.id'))
+        rps_signed = self.sign(rps_root, reference_uri=rps_id)
         self.rps_batch.append(rps_signed)
+        return rps_signed
 
     def send_batch(self, batch_fields):
         result = {}
@@ -692,3 +701,41 @@ class NFSeBetha(BaseNFSe):
         }
         del ws
         return result
+
+    def add_to_cancel(self, nf_fields):
+        cancel_root = xml.create_root_element('CancelarNfseEnvio', ns=self.nsmap)
+        pedido = xml.create_root_element('Pedido', ns=self.nsmap)
+        xml.add_element(pedido, None, 'InfPedidoCancelamento', ns=self.nsmap)
+        xml.add_element(pedido, 'InfPedidoCancelamento', 'IdentificacaoNfse', ns=self.nsmap)
+        xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'Numero', text=nf_fields.get('nf.numero'), ns=self.nsmap)
+        xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'Cnpj', text=nf_fields.get('nf.prestador.documento'), ns=self.nsmap)
+        if nf_fields.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'InscricaoMunicipal', text=nf_fields.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'CodigoMunicipio', text=nf_fields.get('nf.codigo_municipio'), ns=self.nsmap)
+        xml.add_element(pedido, 'InfPedidoCancelamento', 'CodigoCancelamento', text=nf_fields.get('nf.codigo_cancelamento'), ns=self.nsmap)
+        pedido_signed = self.sign(pedido)
+        cancel_root.append(pedido_signed.getroot())
+        self.cancel_batch.append(cancel_root)
+        return cancel_root
+    
+    def cancel(self, strict=True, raw_response=False):
+        result = []
+        errors = []
+        ws = self.connect('cancelarNfse')
+        for nf in self.cancel_batch:
+            xml_data = self._validate_xml(nf)
+            if xml_data.isvalid():
+                with ws.settings(strict=strict, raw_response=raw_response):
+                    data = xmltodict.parse(xml.dump_tostring(nf,xml_declaration=False), attr_prefix='')
+                    ws_result = ws.service.CancelarNfseEnvio(data['CancelarNfseEnvio']['Pedido'])
+                    result.append({
+                        'xml': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
+                        'ws.response': ws_result,
+                    })
+            else:
+                errors.append({
+                    'xml': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
+                    'error': xml_data.last_error,
+                })
+        del ws
+        return (result, errors)
