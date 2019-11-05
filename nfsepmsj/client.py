@@ -236,15 +236,31 @@ class NFSeAbrasf(BaseNFSe):
                     ns=self.nsmap
                 )
         # Intermediario
-
+        if self._has_fields('nf.intermediario.', rps_fields):
+            xml.add_element(rps, None, 'Intermediario', ns=self.nsmap)
+            xml.add_element(rps, 'Intermediario', 'IdentificacaoIntermediario', ns=self.nsmap)
+            xml.add_element(rps, 'Intermediario/IdentificacaoIntermediario', 'CpfCnpj', ns=self.nsmap)
+            if len(rps_fields.get('nf.intermediario.documento')) == 11:
+                xml.add_element(rps, 'Intermediario/IdentificacaoIntermediario/CpfCnpj', 'Cpf', text=rps_fields.get('nf.intermediario.documento'), ns=self.nsmap)
+            else:
+                xml.add_element(rps, 'Intermediario/IdentificacaoIntermediario/CpfCnpj', 'Cnpj', text=rps_fields.get('nf.intermediario.documento'), ns=self.nsmap)
+            if rps_fields.get('nf.intermediario.inscricao_municipal'):
+                xml.add_element(rps, 'Intermediario/IdentificacaoIntermediario', 'InscricaoMunicipal', text=rps_fields['nf.intermediario.inscricao_municipal'], ns=self.nsmap)
+            xml.add_element(rps, 'Intermediario', 'RazaoSocial', text=rps_fields.get('nf.intermediario.razao_social'), ns=self.nsmap)
         # Construcao Civil
-
+        if self._has_fields('nf.construcao_civil.', rps_fields):
+            xml.add_element(rps, None, 'ConstrucaoCivil', ns=self.nsmap)
+            xml.add_element(rps, 'ConstrucaoCivil', 'CodigoObra', text=rps_fields.get('nf.construcao_civil.codigo_obra'), ns=self.nsmap)
+            xml.add_element(rps, 'ConstrucaoCivil', 'Art', text=rps_fields.get('nf.construcao_civil.art'), ns=self.nsmap)
         if rps_fields.get('nf.regime_especial_tributacao'):
             xml.add_element(inf_declaracao, None, 'RegimeEspecialTributacao', text=rps_fields.get('nf.regime_especial_tributacao'), ns=self.nsmap)
         xml.add_element(inf_declaracao, None, 'OptanteSimplesNacional', text=rps_fields.get('nf.optante_simples'), ns=self.nsmap)
         xml.add_element(inf_declaracao, None, 'IncentivoFiscal', text=rps_fields.get('nf.incentivo_fiscal'), ns=self.nsmap)
         return rps
 
+    def connect(self):
+        return self._connect(self.ws_url)
+    
     def xml_from_rps(self, rps_fields, pretty_print=False):
         rps = self._gen_rps_xml(rps_fields)
         return xml.dump_tostring(rps, xml_declaration=False, pretty_print=pretty_print)
@@ -256,7 +272,7 @@ class NFSeAbrasf(BaseNFSe):
         return rps_signed
     
     def send(self):
-        ws = self._connect(self.ws_url)
+        ws = self.connect()
         result = []
         errors = []
         for rps in self.rps_batch:
@@ -274,14 +290,14 @@ class NFSeAbrasf(BaseNFSe):
                     {
                         'rps.lote.id': rps_batch_id,
                         'xml.response': ws_return,
-                        'xml': xml.dump_tostring(gerar_nfse_envio, xml_declaration=False, pretty_print=True),
+                        'xml.request': xml.dump_tostring(gerar_nfse_envio, xml_declaration=False, pretty_print=True),
                     }
                 )
             else:
                 errors.append(
                     {
                         'rps.lote.id': rps_batch_id,
-                        'xml': xml.dump_tostring(gerar_nfse_envio, xml_declaration=False, pretty_print=True),
+                        'xml.request': xml.dump_tostring(gerar_nfse_envio, xml_declaration=False, pretty_print=True),
                         'error': xml_data.last_error
                     }
                 )
@@ -289,7 +305,7 @@ class NFSeAbrasf(BaseNFSe):
         return (result, errors)
 
     def send_from_xml(self, xml_str):
-        ws = self._connect(self.ws_url)
+        ws = self.connect()
         ws_return = ws.service.GerarNfse(self.__wsdl_header__, xml_str)
         del ws
         return ws_return
@@ -325,18 +341,18 @@ class NFSeAbrasf(BaseNFSe):
         xml_data = self._validate_xml(batch_signed)
         if xml_data.isvalid():
             batch_data = xml.dump_tostring(batch_signed, xml_declaration=False)
-            ws = self._connect(self.ws_url)
+            ws = self.connect()
             ws_return = ws.service.RecepcionarLoteRpsSincrono(self.__wsdl_header__, batch_data)
             result = {
                 'lote.id': batch_fields.get('lote.id'),
                 'xml.response': ws_return,
-                'xml': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
+                'xml.request': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
             }
             del ws
         else:
             errors = {
                 'lote.id': batch_fields.get('lote.id'),
-                'xml': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
+                'xml.request': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
                 'error': xml_data.last_error
             }
         return (result, errors)
@@ -369,7 +385,7 @@ class NFSeAbrasf(BaseNFSe):
     def cancel(self):
         result = []
         errors = []
-        ws = self._connect(self.ws_url)
+        ws = self.connect()
         for nf_to_cancel in self.cancel_batch:
             cancelar_nfse_envio = xml.create_root_element('CancelarNfseEnvio', ns=self.nsmap)
             cancelar_nfse_envio.append(nf_to_cancel.getroot())
@@ -385,20 +401,81 @@ class NFSeAbrasf(BaseNFSe):
                     {
                         'nf.cancela.id': cancel_id,
                         'xml.response': ws_return,
-                        'xml': xml.dump_tostring(cancelar_nfse_envio, xml_declaration=False, pretty_print=True),
+                        'xml.request': xml.dump_tostring(cancelar_nfse_envio, xml_declaration=False, pretty_print=True),
                     }
                 )
             else:
                 errors.append(
                     {
                         'nf.cancela.id': cancel_id,
-                        'xml': xml.dump_tostring(cancelar_nfse_envio, xml_declaration=False, pretty_print=True),
+                        'xml.request': xml.dump_tostring(cancelar_nfse_envio, xml_declaration=False, pretty_print=True),
                         'error': xml_data.last_error
                     }
                 )
         del ws
         return (result, errors)
-        
+
+    def get_nfse_by_rps(self, params):
+        result = {}
+        error = {}
+        consulta_envio = xml.create_root_element('ConsultarNfseRpsEnvio', ns=self.nsmap)
+        xml.add_element(consulta_envio, None, 'IdentificacaoRps', ns=self.nsmap)
+        xml.add_element(consulta_envio, 'IdentificacaoRps', 'Numero', text=params.get('rps.numero'), ns=self.nsmap)
+        xml.add_element(consulta_envio, 'IdentificacaoRps', 'Serie', text=params.get('rps.serie'), ns=self.nsmap)
+        xml.add_element(consulta_envio, 'IdentificacaoRps', 'Tipo', text=params.get('rps.tipo'), ns=self.nsmap)
+        xml.add_element(consulta_envio, None, 'Prestador', ns=self.nsmap)
+        xml.add_element(consulta_envio, 'Prestador', 'CpfCnpj', ns=self.nsmap)
+        if len(params.get('nf.prestador.documento')) == 11: #CPF
+            xml.add_element(consulta_envio, 'Prestador/CpfCnpj', 'Cpf', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        else: # CNPJ
+            xml.add_element(consulta_envio, 'Prestador/CpfCnpj', 'Cnpj', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        if params.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(consulta_envio, 'Prestador', 'InscricaoMunicipal', text=params.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        xml_data = self._validate_xml(consulta_envio)
+        if xml_data.isvalid():
+            ws = self.connect()
+            ws_return = ws.service.ConsultarNfsePorRps(self.__wsdl_header__, xml.dump_tostring(consulta_envio, xml_declaration=False))
+            del ws
+            result = {
+                'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
+                'xml.response': ws_return,
+            }
+        else:
+            error = {
+                'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
+                'error': xml_data.last_error,
+            }
+        return (result, error)
+
+    def get_batch_status(self, params):
+        result = {}
+        error = {}
+        consulta_envio = xml.create_root_element('ConsultarLoteRpsEnvio', ns=self.nsmap)
+        xml.add_element(consulta_envio, None, 'Prestador', ns=self.nsmap)
+        xml.add_element(consulta_envio, 'Prestador', 'CpfCnpj', ns=self.nsmap)
+        if len(params.get('nf.prestador.documento')) == 11: #CPF
+            xml.add_element(consulta_envio, 'Prestador/CpfCnpj', 'Cpf', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        else: # CNPJ
+            xml.add_element(consulta_envio, 'Prestador/CpfCnpj', 'Cnpj', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        if params.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(consulta_envio, 'Prestador', 'InscricaoMunicipal', text=params.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        xml.add_element(consulta_envio, None, 'Protocolo', text=params.get('lote.protocolo'), ns=self.nsmap)
+        xml_data = self._validate_xml(consulta_envio)
+        if xml_data.isvalid():
+            ws = self.connect()
+            ws_return = ws.service.ConsultarLoteRps(self.__wsdl_header__, xml.dump_tostring(consulta_envio, xml_declaration=False))
+            del ws
+            result = {
+                'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
+                'xml.response': ws_return,
+            }
+        else:
+            error = {
+                'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
+                'error': xml_data.last_error,
+            }
+        return (result, error)
+
 
 class NFSeBetha(BaseNFSe):
 
@@ -552,13 +629,54 @@ class NFSeBetha(BaseNFSe):
                     ns=self.nsmap
                 )
         # Intermediario
-
+        if self._has_fields('nf.intermediario.', rps_fields):
+            xml.add_element(rps, None, 'IntermediarioServico', ns=self.nsmap)
+            xml.add_element(rps, 'IntermediarioServico', 'RazaoSocial', text=rps_fields.get('nf.intermediario.razao_social'), ns=self.nsmap)
+            xml.add_element(rps, 'IntermediarioServico', 'CpfCnpj', ns=self.nsmap)
+            if len(rps_fields.get('nf.intermediario.documento')) == 11:
+                xml.add_element(rps, 'IntermediarioServico/CpfCnpj', 'Cpf', text=rps_fields.get('nf.intermediario.documento'), ns=self.nsmap)
+            else:
+                xml.add_element(rps, 'IntermediarioServico/CpfCnpj', 'Cnpj', text=rps_fields.get('nf.intermediario.documento'), ns=self.nsmap)
+            if rps_fields.get('nf.intermediario.inscricao_municipal'):
+                xml.add_element(rps, 'IntermediarioServico', 'InscricaoMunicipal', text=rps_fields['nf.intermediario.inscricao_municipal'], ns=self.nsmap)
         # Construcao Civil
-
+        if self._has_fields('nf.construcao_civil.', rps_fields):
+            xml.add_element(rps, None, 'ConstrucaoCivil', ns=self.nsmap)
+            xml.add_element(rps, 'ConstrucaoCivil', 'CodigoObra', text=rps_fields.get('nf.construcao_civil.codigo_obra'), ns=self.nsmap)
+            xml.add_element(rps, 'ConstrucaoCivil', 'Art', text=rps_fields.get('nf.construcao_civil.art'), ns=self.nsmap)
         rps_signed = self.sign(rps_root, reference_uri=rps_id)
         self.rps_batch.append(rps_signed)
         return rps_signed
 
+    def get_send_batch_message(self, batch_fields):
+        batch_fields['lote.rps.quantidade'] = str(len(self.rps_batch))
+        lote_rps = xml.create_root_element(
+            'LoteRps',
+            ns=self.nsmap,
+            Id=batch_fields.get('lote.id')
+        )
+        xml.add_element(lote_rps, None, 'NumeroLote', text=batch_fields.get('lote.numero'), ns=self.nsmap)
+        xml.add_element(lote_rps, None, 'Cnpj', text=batch_fields.get('nf.prestador.documento'), ns=self.nsmap)
+        xml.add_element(lote_rps, None, 'InscricaoMunicipal', text=batch_fields.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        xml.add_element(lote_rps, None, 'QuantidadeRps', text=batch_fields.get('lote.rps.quantidade'), ns=self.nsmap)
+        lista_rps = xml.add_element(lote_rps, None, 'ListaRps', ns=self.nsmap)
+        for rps in self.rps_batch:
+            lista_rps.append(rps.getroot())
+        batch_root = xml.create_root_element('EnviarLoteRpsEnvio', ns=self.nsmap)
+        batch_root.append(lote_rps)
+        xml_data = self._validate_xml(batch_root)
+        if xml_data.isvalid():
+            # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_root element. Zeep can't (as far as I know)
+            # send a lxml element or XML string representing that complex type, you need pass a dictionary or instantiate that type with client.get_type() 
+            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than copy only the "LoteRps" key.
+            batch_data = xmltodict.parse(xml.dump_tostring(batch_root, xml_declaration=False), attr_prefix='')
+            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps'].copy()
+            ws = self.connect('recepcionarLoteRps')
+            return ws.create_message(ws.service, 'EnviarLoteRpsEnvio', lote_rps_param)
+        else:
+            print xml_data.last_error
+        return None
+    
     def send_batch(self, batch_fields):
         result = {}
         errors = {}
@@ -587,14 +705,14 @@ class NFSeBetha(BaseNFSe):
             ws = self.connect('recepcionarLoteRps')
             ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
             result = {
-                'xml': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
+                'xml.request': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
                 'xml.element': batch_root,
                 'ws.response': ws_result
             }
             del ws
         else:
             errors = {
-                'xml': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
+                'xml.request': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
                 'error': xml_data.last_error
             }
         return (result, errors)
@@ -612,7 +730,7 @@ class NFSeBetha(BaseNFSe):
         #        {
         #            Codigo: 'error code',
         #            Mensagem: 'error message',
-        #            Correcao: 'sometimes usefull'
+        #            Correcao: 'sometimes useful'
         #        }
         #   ]
         # }
@@ -729,12 +847,12 @@ class NFSeBetha(BaseNFSe):
                     data = xmltodict.parse(xml.dump_tostring(nf,xml_declaration=False), attr_prefix='')
                     ws_result = ws.service.CancelarNfseEnvio(data['CancelarNfseEnvio']['Pedido'])
                     result.append({
-                        'xml': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
+                        'xml.request': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
                         'ws.response': ws_result,
                     })
             else:
                 errors.append({
-                    'xml': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
+                    'xml.request': xml.dump_tostring(nf, xml_declaration=False, pretty_print=True),
                     'error': xml_data.last_error,
                 })
         del ws
