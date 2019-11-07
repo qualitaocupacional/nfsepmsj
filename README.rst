@@ -264,7 +264,7 @@ E *errors*, se houver algum, como, por exemplo, erro de validação do XML, vai 
     [
         {
             'nf.cancela.id': 'cancel_id1',
-            'xml': 'o XML que foi gerado para envio',
+            'xml.request': 'o XML que foi gerado para envio',
             'error': 'a mensagem do erro'
         }
     ]
@@ -343,7 +343,7 @@ Campos adicionais para **Consulta de Lote** de NFSe:
 +-------------------------------------+-----------------------------------------------------------------------+
 | Nome                                | Descrição                                                             |
 +=====================================+=======================================================================+
-| 'lote.protocolo'                    | Número do protocolo recebido (geralmente ao enviar lotes assíncronos  |
+| 'lote.protocolo'                    | Número do protocolo recebido (geralmente ao enviar lotes assíncronos) |
 +-------------------------------------+-----------------------------------------------------------------------+
 
 .. code:: python
