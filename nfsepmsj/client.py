@@ -668,9 +668,9 @@ class NFSeBetha(BaseNFSe):
         if xml_data.isvalid():
             # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_root element. Zeep can't (as far as I know)
             # send a lxml element or XML string representing that complex type, you need pass a dictionary or instantiate that type with client.get_type() 
-            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than copy only the "LoteRps" key.
+            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than use only the "LoteRps" key.
             batch_data = xmltodict.parse(xml.dump_tostring(batch_root, xml_declaration=False), attr_prefix='')
-            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps'].copy()
+            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps']
             ws = self.connect('recepcionarLoteRps')
             return ws.create_message(ws.service, 'EnviarLoteRpsEnvio', lote_rps_param)
         else:
@@ -699,9 +699,9 @@ class NFSeBetha(BaseNFSe):
         if xml_data.isvalid():
             # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_root element. Zeep can't (as far as I know)
             # send a lxml element or XML string representing that complex type, you need pass a dictionary or instantiate that type with client.get_type() 
-            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than copy only the "LoteRps" key.
+            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than use only the "LoteRps" key.
             batch_data = xmltodict.parse(xml.dump_tostring(batch_root, xml_declaration=False), attr_prefix='')
-            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps'].copy()
+            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps']
             ws = self.connect('recepcionarLoteRps')
             ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
             result = {
@@ -785,8 +785,7 @@ class NFSeBetha(BaseNFSe):
             ])
         tomador = xsd.SkipValue
         # Tomador fields
-        has_fields = self._has_fields('nf.tomador.', params)
-        if has_fields:
+        if self._has_fields('nf.tomador.', params):
             tomador = OrderedDict()
             if params.get('nf.tomador.documento'):
                 if len(params['nf.tomador.documento']) == 11:
@@ -799,8 +798,7 @@ class NFSeBetha(BaseNFSe):
                 tomador['InscricaoEstadual'] = params['nf.tomador.inscricao_estadual']
         # Intermediario fields
         intermediario_servico = xsd.SkipValue
-        has_fields = self._has_fields('nf.intermediario.', params)
-        if has_fields:
+        if self._has_fields('nf.intermediario.', params):
             intermediario_servico = OrderedDict([
                 ('RazaoSocial', params['nf.intermediario.razao_social']),
             ])
