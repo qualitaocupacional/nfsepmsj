@@ -48,6 +48,8 @@ class BaseNFSe(object):
         self.cancel_batch = []
         self._xsd_file = None
         self.nsmap = {None: self.__xmlns__}
+        # Properties
+        self.target = target
 
     def _connect(self, url):
         return Client(url)
@@ -647,37 +649,8 @@ class NFSeBetha(BaseNFSe):
         rps_signed = self.sign(rps_root, reference_uri=rps_id)
         self.rps_batch.append(rps_signed)
         return rps_signed
-
-    def get_send_batch_message(self, batch_fields):
-        batch_fields['lote.rps.quantidade'] = str(len(self.rps_batch))
-        lote_rps = xml.create_root_element(
-            'LoteRps',
-            ns=self.nsmap,
-            Id=batch_fields.get('lote.id')
-        )
-        xml.add_element(lote_rps, None, 'NumeroLote', text=batch_fields.get('lote.numero'), ns=self.nsmap)
-        xml.add_element(lote_rps, None, 'Cnpj', text=batch_fields.get('nf.prestador.documento'), ns=self.nsmap)
-        xml.add_element(lote_rps, None, 'InscricaoMunicipal', text=batch_fields.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
-        xml.add_element(lote_rps, None, 'QuantidadeRps', text=batch_fields.get('lote.rps.quantidade'), ns=self.nsmap)
-        lista_rps = xml.add_element(lote_rps, None, 'ListaRps', ns=self.nsmap)
-        for rps in self.rps_batch:
-            lista_rps.append(rps.getroot())
-        batch_root = xml.create_root_element('EnviarLoteRpsEnvio', ns=self.nsmap)
-        batch_root.append(lote_rps)
-        xml_data = self._validate_xml(batch_root)
-        if xml_data.isvalid():
-            # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_root element. Zeep can't (as far as I know)
-            # send a lxml element or XML string representing that complex type, you need pass a dictionary or instantiate that type with client.get_type() 
-            # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than use only the "LoteRps" key.
-            batch_data = xmltodict.parse(xml.dump_tostring(batch_root, xml_declaration=False), attr_prefix='')
-            lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps']
-            ws = self.connect('recepcionarLoteRps')
-            return ws.create_message(ws.service, 'EnviarLoteRpsEnvio', lote_rps_param)
-        else:
-            print xml_data.last_error
-        return None
-    
-    def send_batch(self, batch_fields):
+   
+    def send_batch(self, batch_fields, soap_message=False):
         result = {}
         errors = {}
         batch_fields['lote.rps.quantidade'] = str(len(self.rps_batch))
@@ -695,25 +668,30 @@ class NFSeBetha(BaseNFSe):
             lista_rps.append(rps.getroot())
         batch_root = xml.create_root_element('EnviarLoteRpsEnvio', ns=self.nsmap)
         batch_root.append(lote_rps)
-        xml_data = self._validate_xml(batch_root)
+        # Sign
+        batch_signed = self.sign(batch_root, reference_uri=batch_fields.get('lote.id'))
+        xml_data = self._validate_xml(batch_signed)
         if xml_data.isvalid():
-            # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_root element. Zeep can't (as far as I know)
+            # Method EnviarLoteRpsEnvio needs a complex type tcLoteRps, which is a subset of batch_signed element. Zeep can't (as far as I know)
             # send a lxml element or XML string representing that complex type, you need pass a dictionary or instantiate that type with client.get_type() 
             # or similar methods. So we will translate the XML string into a dictionary with "xmltodict" module and than use only the "LoteRps" key.
-            batch_data = xmltodict.parse(xml.dump_tostring(batch_root, xml_declaration=False), attr_prefix='')
+            batch_data = xmltodict.parse(xml.dump_tostring(batch_signed, xml_declaration=False), attr_prefix='')
             lote_rps_param = batch_data['EnviarLoteRpsEnvio']['LoteRps']
             ws = self.connect('recepcionarLoteRps')
-            ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
             result = {
-                'xml.request': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
-                'xml.element': batch_root,
-                'ws.response': ws_result
+                'xml.request': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
+                'xml.element': batch_signed,
             }
+            if soap_message:
+                result['soap.message'] = ws.create_message(ws.service, 'EnviarLoteRpsEnvio', lote_rps_param)
+            else:
+                ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
+                result['ws.response'] = ws_result
             del ws
         else:
             errors = {
-                'xml.request': xml.dump_tostring(batch_root, xml_declaration=False, pretty_print=True),
-                'error': xml_data.last_error
+                'xml.request': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
+                'error': xml_data.last_error,
             }
         return (result, errors)
 
@@ -827,7 +805,11 @@ class NFSeBetha(BaseNFSe):
         xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'Cnpj', text=nf_fields.get('nf.prestador.documento'), ns=self.nsmap)
         if nf_fields.get('nf.prestador.inscricao_municipal'):
             xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'InscricaoMunicipal', text=nf_fields.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
-        xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'CodigoMunicipio', text=nf_fields.get('nf.codigo_municipio'), ns=self.nsmap)
+        if self.target == 'test':
+            # On test environment, the cancel method only works if CodigoMunicipio is set to '0000000' (?!?!?!)
+            xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'CodigoMunicipio', text='0000000', ns=self.nsmap)
+        else:
+            xml.add_element(pedido, 'InfPedidoCancelamento/IdentificacaoNfse', 'CodigoMunicipio', text=nf_fields.get('nf.codigo_municipio'), ns=self.nsmap)
         xml.add_element(pedido, 'InfPedidoCancelamento', 'CodigoCancelamento', text=nf_fields.get('nf.codigo_cancelamento'), ns=self.nsmap)
         pedido_signed = self.sign(pedido)
         cancel_root.append(pedido_signed.getroot())
