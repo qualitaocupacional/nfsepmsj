@@ -312,9 +312,12 @@ class NFSeAbrasf(BaseNFSe):
         del ws
         return ws_return
 
-    def send_batch(self, batch_fields):
+    def send_batch(self, batch_fields, async_=False):
         result = {}
         errors = {}
+        envelop_tag = 'EnviarLoteRpsSincronoEnvio'
+        if async_:
+            envelop_tag = 'EnviarLoteRpsEnvio'
         batch_fields['lote.rps.quantidade'] = str(len(self.rps_batch))
         lote_rps = xml.create_root_element(
             'LoteRps',
@@ -336,7 +339,7 @@ class NFSeAbrasf(BaseNFSe):
         lista_rps = xml.add_element(lote_rps, None, 'ListaRps', ns=self.nsmap)
         for rps in self.rps_batch:
             lista_rps.append(rps.getroot())
-        batch_root = xml.create_root_element('EnviarLoteRpsSincronoEnvio', ns=self.nsmap)
+        batch_root = xml.create_root_element(envelop_tag, ns=self.nsmap)
         batch_root.append(lote_rps)
         # Sign
         batch_signed = self.sign(batch_root, reference_uri=batch_fields.get('lote.id'))
@@ -344,7 +347,10 @@ class NFSeAbrasf(BaseNFSe):
         if xml_data.isvalid():
             batch_data = xml.dump_tostring(batch_signed, xml_declaration=False)
             ws = self.connect()
-            ws_return = ws.service.RecepcionarLoteRpsSincrono(self.__wsdl_header__, batch_data)
+            if async_:
+                ws_return = ws.service.RecepcionarLoteRps(self.__wsdl_header__, batch_data)
+            else:
+                ws_return = ws.service.RecepcionarLoteRpsSincrono(self.__wsdl_header__, batch_data)
             result = {
                 'lote.id': batch_fields.get('lote.id'),
                 'xml.response': ws_return,
@@ -445,6 +451,73 @@ class NFSeAbrasf(BaseNFSe):
         else:
             error = {
                 'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
+                'error': xml_data.last_error,
+            }
+        return (result, error)
+
+    def get_nfse(self, params, raw_response=False):
+        result = {}
+        error = {}
+        consulta_nfse = xml.create_root_element('ConsultarNfseFaixaEnvio', ns=self.nsmap)
+        xml.add_element(consulta_nfse, None, 'Prestador', ns=self.nsmap)
+        xml.add_element(consulta_nfse, 'Prestador', 'CpfCnpj', ns=self.nsmap)
+        if len(params.get('nf.prestador.documento')) == 11: #CPF
+            xml.add_element(consulta_nfse, 'Prestador/CpfCnpj', 'Cpf', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        else: # CNPJ
+            xml.add_element(consulta_nfse, 'Prestador/CpfCnpj', 'Cnpj', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        if params.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(consulta_nfse, 'Prestador', 'InscricaoMunicipal', text=params.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        xml.add_element(consulta_nfse, None, 'Faixa', ns=self.nsmap)
+        xml.add_element(consulta_nfse, 'Faixa', 'NumeroNfseInicial', text=params['nf.numero.inicial'], ns=self.nsmap)
+        xml.add_element(consulta_nfse, 'Faixa', 'NumeroNfseFinal', text=params.get('nf.numero.final') or params['nf.numero.inicial'], ns=self.nsmap)
+        xml.add_element(consulta_nfse, None, 'Pagina', text=params.get('pagina') or '1', ns=self.nsmap)
+        xml_data = self._validate_xml(consulta_nfse)
+        if xml_data.isvalid():
+            ws = self.connect()
+            ws_return = ws.service.ConsultarNfseFaixa(self.__wsdl_header__, xml.dump_tostring(consulta_nfse, xml_declaration=False))
+            del ws
+            result = {
+                'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
+                'xml.response': ws_return,
+            }
+        else:
+            error = {
+                'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
+                'error': xml_data.last_error,
+            }
+        return (result, error)
+
+    def get_nfse_by_date(self, params, raw_response=False):
+        result = {}
+        error = {}
+        consulta_nfse = xml.create_root_element('ConsultarNfseServicoPrestadoEnvio', ns=self.nsmap)
+        xml.add_element(consulta_nfse, None, 'Prestador', ns=self.nsmap)
+        xml.add_element(consulta_nfse, 'Prestador', 'CpfCnpj', ns=self.nsmap)
+        if len(params.get('nf.prestador.documento')) == 11: #CPF
+            xml.add_element(consulta_nfse, 'Prestador/CpfCnpj', 'Cpf', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        else: # CNPJ
+            xml.add_element(consulta_nfse, 'Prestador/CpfCnpj', 'Cnpj', text=params.get('nf.prestador.documento'), ns=self.nsmap)
+        if params.get('nf.prestador.inscricao_municipal'):
+            xml.add_element(consulta_nfse, 'Prestador', 'InscricaoMunicipal', text=params.get('nf.prestador.inscricao_municipal'), ns=self.nsmap)
+        if params.get('nf.numero'):
+            xml.add_element(consulta_nfse, None, 'NumeroNfse', text=params['nf.numero'], ns=self.nsmap)
+        if params.get('nf.data.inicial') and params.get('nf.data.final'):
+            xml.add_element(consulta_nfse, None, 'PeriodoEmissao', ns=self.nsmap)
+            xml.add_element(consulta_nfse, 'PeriodoEmissao', 'DataInicial', text=params['nf.data.inicial'], ns=self.nsmap)
+            xml.add_element(consulta_nfse, 'PeriodoEmissao', 'DataFinal', text=params['nf.data.final'], ns=self.nsmap)
+        xml.add_element(consulta_nfse, None, 'Pagina', text=params.get('pagina') or '1', ns=self.nsmap)
+        xml_data = self._validate_xml(consulta_nfse)
+        if xml_data.isvalid():
+            ws = self.connect()
+            ws_return = ws.service.ConsultarNfseServicoPrestado(self.__wsdl_header__, xml.dump_tostring(consulta_nfse, xml_declaration=False))
+            del ws
+            result = {
+                'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
+                'xml.response': ws_return,
+            }
+        else:
+            error = {
+                'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
                 'error': xml_data.last_error,
             }
         return (result, error)
