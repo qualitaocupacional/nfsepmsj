@@ -39,7 +39,7 @@ class BaseNFSe(object):
     __wsdl_header__ = '<cabecalho xmlns="http://www.betha.com.br/e-nota-contribuinte-ws" versao="2.02"><versaoDados>2.02</versaoDados></cabecalho>'
     __api_version__ = ''
 
-    def __init__(self, pfx_file, pfx_passwd, target='production'):
+    def __init__(self, pfx_file=None, pfx_passwd=None, target='production'):
         if pfx_file is not None:
             self.cert_data = pkcs12_data(pfx_file, pfx_passwd)
         else:
@@ -97,7 +97,7 @@ class NFSeAbrasf(BaseNFSe):
 
     __api_version__ = '2.02'
 
-    def __init__(self, pfx_file, pfx_passwd, target='production'):
+    def __init__(self, pfx_file=None, pfx_passwd=None, target='production'):
         super(NFSeAbrasf, self).__init__(pfx_file, pfx_passwd, target)
         self._xsd_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -291,7 +291,7 @@ class NFSeAbrasf(BaseNFSe):
                 result.append(
                     {
                         'rps.lote.id': rps_batch_id,
-                        'xml.response': ws_return,
+                        'ws.response': ws_return,
                         'xml.request': xml.dump_tostring(gerar_nfse_envio, xml_declaration=False, pretty_print=True),
                     }
                 )
@@ -353,7 +353,7 @@ class NFSeAbrasf(BaseNFSe):
                 ws_return = ws.service.RecepcionarLoteRpsSincrono(self.__wsdl_header__, batch_data)
             result = {
                 'lote.id': batch_fields.get('lote.id'),
-                'xml.response': ws_return,
+                'ws.response': ws_return,
                 'xml.request': xml.dump_tostring(batch_signed, xml_declaration=False, pretty_print=True),
             }
             del ws
@@ -408,7 +408,7 @@ class NFSeAbrasf(BaseNFSe):
                 result.append(
                     {
                         'nf.cancela.id': cancel_id,
-                        'xml.response': ws_return,
+                        'ws.response': ws_return,
                         'xml.request': xml.dump_tostring(cancelar_nfse_envio, xml_declaration=False, pretty_print=True),
                     }
                 )
@@ -446,7 +446,7 @@ class NFSeAbrasf(BaseNFSe):
             del ws
             result = {
                 'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
-                'xml.response': ws_return,
+                'ws.response': ws_return,
             }
         else:
             error = {
@@ -478,7 +478,7 @@ class NFSeAbrasf(BaseNFSe):
             del ws
             result = {
                 'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
-                'xml.response': ws_return,
+                'ws.response': ws_return,
             }
         else:
             error = {
@@ -513,7 +513,7 @@ class NFSeAbrasf(BaseNFSe):
             del ws
             result = {
                 'xml.request': xml.dump_tostring(consulta_nfse, xml_declaration=False, pretty_print=True),
-                'xml.response': ws_return,
+                'ws.response': ws_return,
             }
         else:
             error = {
@@ -542,7 +542,7 @@ class NFSeAbrasf(BaseNFSe):
             del ws
             result = {
                 'xml.request': xml.dump_tostring(consulta_envio, xml_declaration=False, pretty_print=True),
-                'xml.response': ws_return,
+                'ws.response': ws_return,
             }
         else:
             error = {
@@ -556,7 +556,7 @@ class NFSeBetha(BaseNFSe):
 
     __api_version__ = '01'
 
-    def __init__(self, pfx_file, pfx_passwd, target='production'):
+    def __init__(self, pfx_file=None, pfx_passwd=None, target='production'):
         super(NFSeBetha, self).__init__(pfx_file, pfx_passwd, target)
         self._xsd_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -723,7 +723,7 @@ class NFSeBetha(BaseNFSe):
         self.rps_batch.append(rps_signed)
         return rps_signed
    
-    def send_batch(self, batch_fields, soap_message=False):
+    def send_batch(self, batch_fields, soap_message=False, raw_response=False):
         result = {}
         errors = {}
         batch_fields['lote.rps.quantidade'] = str(len(self.rps_batch))
@@ -758,7 +758,8 @@ class NFSeBetha(BaseNFSe):
             if soap_message:
                 result['soap.message'] = ws.create_message(ws.service, 'EnviarLoteRpsEnvio', lote_rps_param)
             else:
-                ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
+                with ws.settings(strict=False, raw_response=raw_response):
+                    ws_result = ws.service.EnviarLoteRpsEnvio(lote_rps_param)
                 result['ws.response'] = ws_result
             del ws
         else:
