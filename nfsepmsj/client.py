@@ -176,15 +176,6 @@ class NFSeAbrasf(BaseNFSe):
         xml.add_element(servicos, None, 'ExigibilidadeISS', text=rps_fields.get('nf.exigibilidade_iss'), ns=self.nsmap)
         if rps_fields.get('nf.exigibilidade_iss') in ('1', '6', '7') or rps_fields.get('nf.codigo_municipio_incidencia'):
             xml.add_element(servicos, None, 'MunicipioIncidencia', text=rps_fields['nf.codigo_municipio_incidencia'])
-        self._add_fields_nullable(
-            xml_element=servicos,
-            fields_data=(
-                ('nf.tomador.inscricao_municipal', 'Tomador/IdentificacaoTomador', 'InscricaoMunicipal'),
-                ('nf.tomador.razao_social', 'Tomador', 'RazaoSocial'),
-            ),
-            fields=rps_fields,
-            ns=self.nsmap
-        )
         xml.add_element(inf_declaracao, None, 'Prestador', ns=self.nsmap)
         xml.add_element(inf_declaracao, 'Prestador', 'CpfCnpj', ns=self.nsmap)
         if rps_fields.get('nf.prestador.documento'):
@@ -202,15 +193,7 @@ class NFSeAbrasf(BaseNFSe):
                 xml.add_element(inf_declaracao, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cpf', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
             else: #CNPJ
                 xml.add_element(inf_declaracao, 'Tomador/IdentificacaoTomador/CpfCnpj', 'Cnpj', text=rps_fields.get('nf.tomador.documento'), ns=self.nsmap)
-            self._add_fields_nullable(
-                xml_element=inf_declaracao,
-                fields_data=(
-                    ('nf.tomador.contato.telefone', 'Tomador/Contato', 'Telefone'),
-                    ('nf.tomador.contato.email', 'Tomador/Contato', 'Email'),
-                ),
-                fields=rps_fields,
-                ns=self.nsmap
-            )
+            xml.add_element(inf_declaracao, 'Tomador', 'RazaoSocial', text=rps_fields.get('nf.tomador.razao_social'), ns=self.nsmap)
             if rps_fields.get('nf.tomador.logradouro'):
                 xml.add_element(inf_declaracao, 'Tomador', 'Endereco', ns=self.nsmap)
                 self._add_fields_nullable(
