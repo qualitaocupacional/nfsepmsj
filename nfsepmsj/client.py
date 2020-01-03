@@ -174,6 +174,8 @@ class NFSeAbrasf(BaseNFSe):
         if rps_fields.get('nf.codigo_pais'):
             xml.add_element(servicos, None, 'CodigoPais', text=rps_fields.get('nf.codigo_pais'), ns=self.nsmap)
         xml.add_element(servicos, None, 'ExigibilidadeISS', text=rps_fields.get('nf.exigibilidade_iss'), ns=self.nsmap)
+        if rps_fields.get('nf.exigibilidade_iss') in ('1', '6', '7') or rps_fields.get('nf.codigo_municipio_incidencia'):
+            xml.add_element(servicos, None, 'MunicipioIncidencia', text=rps_fields['nf.codigo_municipio_incidencia'])
         self._add_fields_nullable(
             xml_element=servicos,
             fields_data=(
