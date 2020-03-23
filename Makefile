@@ -1,4 +1,4 @@
-.PHONY: clean
+.PHONY: clean dist
 
 PIP := pip install -r
 
@@ -29,11 +29,11 @@ setup:
 clean: .clean-build .clean-pyc .clean-test ## remove all build, test, coverage and Python artifacts
 
 # Build
-release:
+release: clean
 	python setup.py sdist bdist_wheel
 
 dist-test:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
-distribution:
+dist: release
 	twine upload dist/*
