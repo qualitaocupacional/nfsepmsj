@@ -135,7 +135,7 @@ class NFSeAbrasf(BaseNFSe):
         # Servicos
         servicos = xml.add_element(inf_declaracao, None, 'Servico', ns=self.nsmap)
         xml.add_element(servicos, None, 'Valores', ns=self.nsmap)
-        xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_nota'), ns=self.nsmap)
+        xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_servicos'), ns=self.nsmap)
         # if rps_fields.get('nf.total_deducoes'):
         #     xml.add_element(servicos, 'Servico/Valores', 'ValorDeducoes', text=rps_fields.get('nf.total_deducoes'), ns=self.nsmap)
         self._add_fields_nullable(
@@ -590,7 +590,7 @@ class NFSeBetha(BaseNFSe):
         # Servicos
         servicos = xml.add_element(rps, None, 'Servico', ns=self.nsmap)
         xml.add_element(servicos, None, 'Valores', ns=self.nsmap)
-        xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_nota'), ns=self.nsmap)
+        xml.add_element(servicos, 'Valores', 'ValorServicos', text=rps_fields.get('nf.total_servicos'), ns=self.nsmap)
         self._add_fields_nullable(
             xml_element=servicos,
             fields_data=(
