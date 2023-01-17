@@ -1,0 +1,41 @@
+<nfse>
+    <nf>
+        <serie_nfse>1</serie_nfse>
+        <data_fato_gerador>01/12/2022</data_fato_gerador>
+        </valor_total>2022,12</valor_total>
+    </nf>
+    <prestador>
+        <cpfcnpj>12345678901234</cpfcnpj>
+        <cidade>40532</cidade>
+    </prestador>
+    <tomador>
+        <tipo>J</tipo>
+        <cpfcnpj>12345678901234</cpfcnpj>
+        <nome_razao_social>Empresa Tomador</nome_razao_social>
+        <cidade>8327</cidade>
+    </tomador>
+    <itens>
+        <lista>
+            <tributa_municipio_prestador>1</tributa_municipio_prestador>
+            <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
+            <unidade_quantidade>1</unidade_quantidade>
+            <unidade_valor_unitario>1000,06</unidade_valor_unitario>
+            <codigo_item_lista_servico>1709</codigo_item_lista_servico>
+            <descritivo>Descrição do Serviço 1</descritivo>
+            <aliquota_item_lista_servico>3,00</aliquota_item_lista_servico>
+            <situacao_tributaria>0</situacao_tributaria>
+            <valor_tributavel>1000,06</valor_tributavel>
+        </lista>
+        <lista>
+            <tributa_municipio_prestador>1</tributa_municipio_prestador>
+            <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
+            <unidade_quantidade>1</unidade_quantidade>
+            <unidade_valor_unitario>1022,06</unidade_valor_unitario>
+            <codigo_item_lista_servico>1709</codigo_item_lista_servico>
+            <descritivo>Descrição do Serviço 2</descritivo>
+            <aliquota_item_lista_servico>3,00</aliquota_item_lista_servico>
+            <situacao_tributaria>0</situacao_tributaria>
+            <valor_tributavel>1000,06</valor_tributavel>
+        </lista>
+    </itens>
+</nfse>

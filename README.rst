@@ -188,16 +188,77 @@ Estrutura do dicionário com os campos da nota fiscal:
 +---------------------------------------+------------------------------+
 | 'nf.incentivo_fiscal'                 |                              |
 +---------------------------------------+------------------------------+
-| 'nf.intermediario.razao_social        |                              |
+| 'nf.intermediario.razao_social'       |                              |
 +---------------------------------------+------------------------------+
-| 'nf.intermediario.documento           |                              |
+| 'nf.intermediario.documento'          |                              |
 +---------------------------------------+------------------------------+
-| 'nf.intermediario.inscricao_municipal |                              |
+| 'nf.intermediario.inscricao_municipal'|                              |
 +---------------------------------------+------------------------------+
-| 'nf.construcao_civil.codigo_obra      |                              |
+| 'nf.construcao_civil.codigo_obra'     |                              |
 +---------------------------------------+------------------------------+
-| 'nf.construcao_civil.art              |                              |
+| 'nf.construcao_civil.art'             |                              |
 +---------------------------------------+------------------------------+
+
+Campos adicionais para a NFSe da **IPM**:
+
++---------------------------------------+--------------------------------------------------+
+| 'nf.serie'                            |                                                  |
++---------------------------------------+--------------------------------------------------+
+| 'nf.tomador.tipo'                     | J-Jurídica, F-Física ou E-Estrangeiro            |
++---------------------------------------+--------------------------------------------------+
+| 'nf.servicos'                         | Lista de serviços                                |
++---------------------------------------+--------------------------------------------------+
+
+Itens da lista de serviços:
+
++---------------------------------------+------------------------------+
+| 'codigo_municipio                     |                              |
++---------------------------------------+------------------------------+
+| 'quantidade'                          |                              |
++---------------------------------------+------------------------------+
+| 'valor_unitario'                      |                              |
++---------------------------------------+------------------------------+
+| 'codigo_servico'                      |                              |
++---------------------------------------+------------------------------+
+| 'descricao'                           |                              |
++---------------------------------------+------------------------------+
+| 'aliquota_iss'                        |                              |
++---------------------------------------+------------------------------+
+| 'situacao_tributaria'                 |                              |
++---------------------------------------+------------------------------+
+| 'base_calculo'                        |                              |
++---------------------------------------+------------------------------+
+
+
+.. code:: python
+
+    nf_data = {
+        'nf.servicos': [
+            {
+                'codigo_municipio': '8327',
+                'quantidade': '1',
+                'valor_unitario': '1000,06',
+                'codigo_servico': '1001',
+                'descricao': 'Serviço 1',
+                'aliquota_iss': '3,00',
+                'situacao_tributaria': '0',
+                'base_calculo': '1000,06',
+            },
+            {
+                'codigo_municipio': '8327',
+                'quantidade': '1',
+                'valor_unitario': '1022,06',
+                'codigo_servico': '1001',
+                'descricao': 'Serviço 2',
+                'aliquota_iss': '3,00',
+                'situacao_tributaria': '0',
+                'base_calculo': '1022,06',
+            }
+        ]
+    }
+
+
+Estrutura do dicionário com os campos da nota fiscal:
 
 Campos adicionais para **Cancelamento** de NFSe:
 

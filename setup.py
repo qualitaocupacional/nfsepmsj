@@ -12,7 +12,6 @@ install_requires = [
     'zeep>=2.5.0',
     'signxml>=2.5.2',
     'pyOpenSSL>=17.5.0',
-    'six>=1.11.0',
     'xmltodict>=0.12.0',
 ]
 
@@ -20,6 +19,7 @@ install_requires = [
 def read_file(*parts):
     with open(os.path.join(here, *parts), 'r', encoding='utf-8') as fp:
         return fp.read()
+
 
 def find_version(*paths):
     version_file = read_file(*paths)
@@ -42,16 +42,14 @@ setup(
     include_package_data=True,
     install_requires=install_requires,
     zip_safe=False,
-    test_suite='nose.collector',
-    tests_require=['nose'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.8',
     ],
 )
 

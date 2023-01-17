@@ -14,12 +14,9 @@
 # ==============================================================================
 import os
 import types
-import codecs
 import json
 
 from collections import OrderedDict
-
-import six
 
 from lxml import etree
 
@@ -75,7 +72,7 @@ class XMLValidate(object):
 
 
 def xsd_fromfile(f):
-    with codecs.open(f, 'r', encoding='utf-8') as fxsd:
+    with open(f, 'r', encoding='utf-8') as fxsd:
         xmlschema = etree.parse(fxsd)
     return etree.XMLSchema(xmlschema)
 
@@ -103,6 +100,7 @@ def create_root_element(root_tag, ns={}, **attrs):
 
 def add_element(root, element_tag, tag_name, text=None, ns={}, **attrs):
     tag_root = None
+    ns = ns or {}
     ns_keys = [K for K in ns]
     if element_tag:
         if len(ns) == 1:
@@ -135,15 +133,18 @@ def add_element(root, element_tag, tag_name, text=None, ns={}, **attrs):
     return None
 
 
-def dump_tofile(root, xml_file, xml_declaration=True):
-    xmlstring = dump_tostring(root, xml_declaration=xml_declaration)
-    fpxml = codecs.open(xml_file, 'w', encoding='utf-8')
-    fpxml.write(xmlstring)
-    fpxml.close()
+def dump_tofile(root, xml_file, xml_declaration=True, pretty_print=False):
+    xmlstring = dump_tostring(root, xml_declaration=xml_declaration, pretty_print=pretty_print)
+    with open(xml_file, 'w', encoding='utf-8') as fpxml:
+        fpxml.write(xmlstring)
 
 
-def load_fromfile(xml_file):
-    parser = etree.XMLParser(ns_clean=True)
+def load_fromfile(xml_file, clean=False):
+    parse_options = {
+        'remove_blank_text': clean,
+        'remove_comments': clean,
+    }
+    parser = etree.XMLParser(ns_clean=True, **parse_options)
     return etree.parse(xml_file, parser)
 
 
@@ -153,13 +154,15 @@ def load_fromstring(xmlstring):
 
 
 def dump_tostring(xmlelement, xml_declaration=True, pretty_print=False):
-    xml_header = u''
+    xml_header = ''
     if xml_declaration:
-        if isinstance(xml_declaration, six.string_types):
+        if isinstance(xml_declaration, str):
             xml_header = xml_declaration
         else:
-            xml_header = u'<?xml version="1.0" encoding="UTF-8"?>'
-    return ''.join([xml_header, etree.tostring(xmlelement, pretty_print=pretty_print)])
+            xml_header = '<?xml version="1.0" encoding="UTF-8"?>'
+    if xml_header and pretty_print:
+        xml_header += '\n'
+    return ''.join((xml_header, etree.tostring(xmlelement, encoding='unicode', pretty_print=pretty_print)))
 
 
 def _check_attrs(tag_dict):
@@ -246,7 +249,7 @@ def load_fromjson(json_obj, root=None):
     etree ElementTree
     """
     if json_obj:
-        if isinstance(json_obj, six.string_types):
+        if isinstance(json_obj, str):
             py_ = json.loads(json_obj, object_pairs_hook=OrderedDict)
         else:
             py_ = json_obj
