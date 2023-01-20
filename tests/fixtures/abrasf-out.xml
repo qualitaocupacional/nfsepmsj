@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rps xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+  <InfDeclaracaoPrestacaoServico Id="RPS123456">
+    <Competencia>2022-12-01</Competencia>
+    <Servico>
+      <Valores>
+        <ValorServicos>2022.12</ValorServicos>
+      </Valores>
+      <IssRetido/>
+      <ItemListaServico>1001</ItemListaServico>
+      <Discriminacao>Descrição do Serviço</Discriminacao>
+      <CodigoMunicipio>40532</CodigoMunicipio>
+      <ExigibilidadeISS>1</ExigibilidadeISS>
+      <MunicipioIncidencia>40532</MunicipioIncidencia>
+    </Servico>
+    <Prestador>
+      <CpfCnpj>
+        <Cnpj>12345678901234</Cnpj>
+      </CpfCnpj>
+    </Prestador>
+    <Tomador>
+      <IdentificacaoTomador>
+        <CpfCnpj>
+          <Cnpj>12345678901234</Cnpj>
+        </CpfCnpj>
+      </IdentificacaoTomador>
+      <RazaoSocial>Empresa Tomador</RazaoSocial>
+    </Tomador>
+    <OptanteSimplesNacional/>
+    <IncentivoFiscal/>
+  </InfDeclaracaoPrestacaoServico>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+      <Reference URI="#RPS123456">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <DigestValue>jjr6yohXEV4FSPSE3841L7K+PVU=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>Spsqn17hZpydeMmREroIMcaA/5/LBhLQUJNriFUlDu0MPJJg8vUOdUkisBCoIJjYZqXujYWSLDSxcEx9aAUo4RHxdETzt8owMpsxpFbh8PU2ouUOs89Rx+Tz6gBlnjt4ZgKRWFjUygdptG1KeGWnoTFFzPitQGhOeUUY+v/rhJ8=</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>MIIDETCCAnqgAwIBAgIJANFiUjAUtkAZMA0GCSqGSIb3DQEBCwUAMIGfMS4wLAYD
+VQQDDCVRdWFsaXRhIFNlZ3VyYW5jYSBlIFNhdWRlIE9jdXBhY2lvbmFsMQswCQYD
+VQQGEwJCUjELMAkGA1UECAwCU0MxFjAUBgNVBAcMDUZsb3JpYW5vcG9saXMxLjAs
+BgNVBAoMJVF1YWxpdGEgU2VndXJhbmNhIGUgU2F1ZGUgT2N1cGFjaW9uYWwxCzAJ
+BgNVBAsMAklUMB4XDTE4MDUwOTE5Mzg1MVoXDTE5MDUwOTE5Mzg1MVowgZ8xLjAs
+BgNVBAMMJVF1YWxpdGEgU2VndXJhbmNhIGUgU2F1ZGUgT2N1cGFjaW9uYWwxCzAJ
+BgNVBAYTAkJSMQswCQYDVQQIDAJTQzEWMBQGA1UEBwwNRmxvcmlhbm9wb2xpczEu
+MCwGA1UECgwlUXVhbGl0YSBTZWd1cmFuY2EgZSBTYXVkZSBPY3VwYWNpb25hbDEL
+MAkGA1UECwwCSVQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALeLfY9iMPbh
+rlFYeKzA/KEYkLXGO3c/Bw/mYfDqapGqt3NFAKGbxfKRjtHfjl46F+hhNlIMrUyV
+JO8Ihs2pXkYEKBogi6+JYvyJvcJlxrgmaaiDhgbGERHoi7jec+SLhQg62693GmIf
+j5omWzHl6Ca0q3OICx/xEeWcrqhsvI0TAgMBAAGjUzBRMB0GA1UdDgQWBBThp900
+1aqS8t7oNNpJbKPh7zt9KzAfBgNVHSMEGDAWgBThp9001aqS8t7oNNpJbKPh7zt9
+KzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4GBAK8ZlStiOQcsRl//
+xLOnjoZo9P/nCfgJom72A9SozyUZ+BC0xKqu5+Myngqai5BavsI0t0QfNXnz995n
+tqCpuQuO/6/lrb90tApoghOxljoKRzFdbxmpa4UQ85jgFsCk66a3uOGGIZvXR7eP
+mAlNbPO5iLh8c3PnAv9NLCBIXaff
+</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+  </Signature>
+</Rps>
