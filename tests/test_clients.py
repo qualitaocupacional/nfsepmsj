@@ -36,14 +36,23 @@ class TestClients(unittest.TestCase):
             'nf.exigibilidade_iss': '1',
             'nf.codigo_municipio_incidencia': '40532',
             'nf.total_servicos': '2022.12',
+            'nf.desconto_incondicionado': '10.00',
             'nf.codigo_servico': '1001',
             'nf.codigo_municipio': '40532',
+            'nf.codigo_municipio_incidencia': '40532',
             'nf.discriminacao': 'Descrição do Serviço',
             'nf.prestador.documento': '12345678901234',
             'nf.tomador.tipo': 'J',
             'nf.tomador.documento': '12345678901234',
             'nf.tomador.razao_social': 'Empresa Tomador',
             'nf.tomador.codigo_municipio': '8327',
+            'nf.tomador.logradouro': 'Rua do Tomador',
+            'nf.tomador.numero_logradouro': '123',
+            'nf.tomador.cep': '12345678',
+            'nf.tomador.bairro': 'Bairro Tomador',
+            'nf.tomador.codigo_municipio': '40532',
+            'nf.tomador.uf': 'SC',
+            'nf.tomador.contato.email': 'tomador@empresa.com.br',
             'nf.servicos': [
                 {
                     'item.tributa_prestador': 'S',
@@ -85,7 +94,7 @@ class TestClients(unittest.TestCase):
         self.assertEqual(xml_out, xml_expected)
         self.assertEqual(len(nfse.rps_batch), 1)
 
-    def test_ipm_min_xml(self):
+    def test_ipm_xml(self):
         nfse = NFSeIPM(
             ws_url='https://',
             pfx_file=self.cert_file,
@@ -93,8 +102,9 @@ class TestClients(unittest.TestCase):
             target='test'
         )
         signed_nfse = nfse.add_rps(self.nfse_data)
-        xml_expec_tree = xml.load_fromfile(os.path.join(self.here, 'fixtures', 'ipm-nfse-min-test.xml'), clean=True)
-        # print(xml.dump_tostring(signed_nfse, xml_declaration=False, pretty_print=True))
+        xml_expec_tree = xml.load_fromfile(os.path.join(self.here, 'fixtures', 'ipm-nfse-full-test.xml'), clean=True)
+        # save output
+        # xml.dump_tofile(signed_nfse, xml_file=os.path.join(self.here, 'fixtures', 'ipm-out.xml'), pretty_print=True)
         xml_out = xml.dump_tostring(signed_nfse)
         xml_expected = xml.dump_tostring(xml_expec_tree)
         self.assertEqual(xml_out, xml_expected)

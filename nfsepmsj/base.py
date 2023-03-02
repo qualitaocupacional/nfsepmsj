@@ -19,6 +19,8 @@ from zeep import Client
 
 from lxml import etree
 
+import signxml
+
 
 class BaseNFSe(object):
     __xmlns__ = 'http://www.betha.com.br/e-nota-contribuinte-ws'
@@ -82,4 +84,15 @@ class BaseNFSe(object):
         self.cancel_batch = []
 
     def sign(self, xml_element, reference_uri=None):
-        return xml.sign(etree.ElementTree(xml_element), self.cert_data, reference_uri=reference_uri)
+        unsafe_signer = xml.XMLSignerUnsafe(
+            method=signxml.methods.enveloped,
+            signature_algorithm='rsa-sha1',
+            digest_algorithm='sha1',
+            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+        )
+        return xml.sign(
+            etree.ElementTree(xml_element),
+            self.cert_data,
+            reference_uri=reference_uri,
+            signer=unsafe_signer
+        )

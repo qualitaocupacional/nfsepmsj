@@ -103,6 +103,9 @@ class NFSeIPM(BaseNFSe):
     def data(self, value: dict):
         # validate??
         self._data = value
+        # Formating
+        if 'nf.tomador.logradouro' in self._data and 'nf.tomador.numero_logradouro' in self._data:
+            self._data['nf.tomador.logradouro'] = f"{self._data['nf.tomador.logradouro']}, {self._data['nf.tomador.numero_logradouro']}"
 
     def _data_format(self, field_name: str, field_value: str):
         attr = self.data_format.data.get(field_name)
@@ -113,7 +116,7 @@ class NFSeIPM(BaseNFSe):
 
     def xml(self):
         root = xml.create_root_element('nfse')
-        if self.target == 'test':
+        if self.target != 'production':
             xml.add_element(root, None, 'nfse_teste', text='1')
         xml.add_element(root, None, 'nf')
         self._add_fields_nullable(
@@ -128,6 +131,8 @@ class NFSeIPM(BaseNFSe):
         xml.add_element(root, None, 'prestador')
         xml.add_element(root, 'prestador', 'cpfcnpj', text=self.data['nf.prestador.documento'])
         xml.add_element(root, 'prestador', 'cidade', text=self.data['nf.codigo_municipio'])
+
+        #### Tomador
         xml.add_element(root, None, 'tomador')
         if self.data.get('nf.tomador.usar_endereco'):
             xml.add_element(root, 'tomador', 'endereco_informado', text=self.data['nf.tomador.usar_endereco'])
@@ -138,7 +143,11 @@ class NFSeIPM(BaseNFSe):
                 ('nf.tomador.identificador', 'tomador', 'identificador'),
                 ('nf.tomador.documento', 'tomador', 'cpfcnpj'),
                 ('nf.tomador.razao_social', 'tomador', 'nome_razao_social'),
+                ('nf.tomador.logradouro', 'tomador', 'logradouro'),
+                ('nf.tomador.contato.email', 'tomador', 'email'),
+                ('nf.tomador.bairro', 'tomador', 'bairro'),
                 ('nf.tomador.codigo_municipio', 'tomador', 'cidade'),
+                ('nf.tomador.cep', 'tomador', 'cep'),
             ),
             fields=self.data
         )

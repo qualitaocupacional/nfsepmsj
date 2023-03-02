@@ -20,11 +20,15 @@ from collections import OrderedDict
 
 from lxml import etree
 
-import signxml
-
 from signxml import XMLSigner
 
 from nfsepmsj import utils
+
+
+class XMLSignerUnsafe(XMLSigner):
+    # Override check_deprecated_methods to enforce unsafe methods, because, unfortunately the goverment still use it
+    def check_deprecated_methods(self):
+        pass
 
 
 class XMLValidate(object):
@@ -269,22 +273,25 @@ def load_fromjson(json_obj, root=None):
     return None
 
 
-def sign(xml, cert_data, reference_uri=None):
-    signer = XMLSigner(
-        method=signxml.methods.enveloped,
-        signature_algorithm='rsa-sha1',
-        digest_algorithm='sha1',
-        c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
-    )
+def sign(xml, cert_data, reference_uri=None, use_ds_namespace=False, signer=None):
+    if signer is None:
+        signer = XMLSigner(
+            method=signxml.methods.enveloped,
+            signature_algorithm='rsa-sha256',
+            digest_algorithm='sha256',
+            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+        )
     xml_root = None
     if not isinstance(xml, etree._ElementTree):
         xml = load_fromfile(xml)
     xml_root = xml.getroot()
-    # FIX: Isso eh uma gambiarra para poder tirar o prefixo da tag <Signature>, ja que o webservices da Betha
-    # nao consegue achar a assinatura se ela tiver o prefixo do namespace padrao <ds:Signature>...
-    ds = signer.namespaces['ds']
-    del signer.namespaces['ds']
-    signer.namespaces[None] = ds
+    if not use_ds_namespace:
+        # FIX: Isso eh uma gambiarra para poder tirar o prefixo da tag <Signature>, ja que o webservices da Betha
+        # nao consegue achar a assinatura se ela tiver o prefixo do namespace padrao <ds:Signature>...
+        ds = signer.namespaces['ds']
+        del signer.namespaces['ds']
+        signer.namespaces[None] = ds
+
     signed_root = signer.sign(
         xml_root,
         key=cert_data['key_str'],

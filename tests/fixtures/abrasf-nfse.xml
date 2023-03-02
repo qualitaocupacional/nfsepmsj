@@ -5,6 +5,7 @@
     <Servico>
       <Valores>
         <ValorServicos>2022.12</ValorServicos>
+        <DescontoIncondicionado>10.00</DescontoIncondicionado>
       </Valores>
       <IssRetido/>
       <ItemListaServico>1001</ItemListaServico>
@@ -25,6 +26,14 @@
         </CpfCnpj>
       </IdentificacaoTomador>
       <RazaoSocial>Empresa Tomador</RazaoSocial>
+      <Endereco>
+        <Endereco>Rua do Tomador</Endereco>
+        <Numero>123</Numero>
+        <Bairro>Bairro Tomador</Bairro>
+        <CodigoMunicipio>40532</CodigoMunicipio>
+        <Uf>SC</Uf>
+        <Cep>12345678</Cep>
+      </Endereco>
     </Tomador>
     <OptanteSimplesNacional/>
     <IncentivoFiscal/>
@@ -39,10 +48,10 @@
           <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-        <DigestValue>jjr6yohXEV4FSPSE3841L7K+PVU=</DigestValue>
+        <DigestValue>ccstVl5uVOSPhOXEQ2g8Uxl7CTg=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>Spsqn17hZpydeMmREroIMcaA/5/LBhLQUJNriFUlDu0MPJJg8vUOdUkisBCoIJjYZqXujYWSLDSxcEx9aAUo4RHxdETzt8owMpsxpFbh8PU2ouUOs89Rx+Tz6gBlnjt4ZgKRWFjUygdptG1KeGWnoTFFzPitQGhOeUUY+v/rhJ8=</SignatureValue>
+    <SignatureValue>KRXBFzAHmFPA3YqwebdZu9P9yCBmjStJ8F8W278GOd0swHUxvYWbApfUlNVVzZ8mhBtK93HxDs+efZsAMFShc3BobrvLrAcsrk25GsZ+y8KCqzj1EjKWwlhhfF27W4ZMdAnf48lMrg2DjBxSH43YgaQZuwSifLcqFGb1gg2+E1Q=</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIDETCCAnqgAwIBAgIJANFiUjAUtkAZMA0GCSqGSIb3DQEBCwUAMIGfMS4wLAYD

@@ -1,8 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <nfse>
+    <nfse_teste>1</nfse_teste>
     <nf>
         <serie_nfse>1</serie_nfse>
         <data_fato_gerador>01/12/2022</data_fato_gerador>
-        </valor_total>2022,12</valor_total>
+        <valor_total>2022,12</valor_total>
     </nf>
     <prestador>
         <cpfcnpj>12345678901234</cpfcnpj>
@@ -12,11 +14,15 @@
         <tipo>J</tipo>
         <cpfcnpj>12345678901234</cpfcnpj>
         <nome_razao_social>Empresa Tomador</nome_razao_social>
-        <cidade>8327</cidade>
+        <logradouro>Rua do Tomador, 123</logradouro>
+        <email>tomador@empresa.com.br</email>
+        <bairro>Bairro Tomador</bairro>
+        <cidade>40532</cidade>
+        <cep>12345678</cep>
     </tomador>
     <itens>
         <lista>
-            <tributa_municipio_prestador>1</tributa_municipio_prestador>
+            <tributa_municipio_prestador>S</tributa_municipio_prestador>
             <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
             <unidade_quantidade>1</unidade_quantidade>
             <unidade_valor_unitario>1000,06</unidade_valor_unitario>
@@ -27,7 +33,7 @@
             <valor_tributavel>1000,06</valor_tributavel>
         </lista>
         <lista>
-            <tributa_municipio_prestador>1</tributa_municipio_prestador>
+            <tributa_municipio_prestador>S</tributa_municipio_prestador>
             <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
             <unidade_quantidade>1</unidade_quantidade>
             <unidade_valor_unitario>1022,06</unidade_valor_unitario>
@@ -35,7 +41,7 @@
             <descritivo>Descrição do Serviço 2</descritivo>
             <aliquota_item_lista_servico>3,00</aliquota_item_lista_servico>
             <situacao_tributaria>0</situacao_tributaria>
-            <valor_tributavel>1000,06</valor_tributavel>
+            <valor_tributavel>1022,06</valor_tributavel>
         </lista>
     </itens>
 </nfse>
