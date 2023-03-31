@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfse id="nota">
+  <nfse_teste>1</nfse_teste>
+  <nf>
+    <serie_nfse>1</serie_nfse>
+    <data_fato_gerador>01/12/2022</data_fato_gerador>
+    <valor_total>2022,12</valor_total>
+  </nf>
+  <prestador>
+    <cpfcnpj>12345678901234</cpfcnpj>
+    <cidade>40532</cidade>
+  </prestador>
+  <tomador>
+    <tipo>J</tipo>
+    <cpfcnpj>12345678901234</cpfcnpj>
+    <nome_razao_social>Empresa Tomador</nome_razao_social>
+    <logradouro>Rua do Tomador, 123</logradouro>
+    <email>tomador@empresa.com.br</email>
+    <bairro>Bairro Tomador</bairro>
+    <cidade>40532</cidade>
+    <cep>12345678</cep>
+  </tomador>
+  <itens>
+    <lista>
+      <tributa_municipio_prestador>S</tributa_municipio_prestador>
+      <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
+      <unidade_quantidade>1</unidade_quantidade>
+      <unidade_valor_unitario>1000,06</unidade_valor_unitario>
+      <codigo_item_lista_servico>1709</codigo_item_lista_servico>
+      <descritivo>Descrição do Serviço 1</descritivo>
+      <aliquota_item_lista_servico>3,00</aliquota_item_lista_servico>
+      <situacao_tributaria>0</situacao_tributaria>
+      <valor_tributavel>1000,06</valor_tributavel>
+    </lista>
+    <lista>
+      <tributa_municipio_prestador>S</tributa_municipio_prestador>
+      <codigo_local_prestacao_servico>8327</codigo_local_prestacao_servico>
+      <unidade_quantidade>1</unidade_quantidade>
+      <unidade_valor_unitario>1022,06</unidade_valor_unitario>
+      <codigo_item_lista_servico>1709</codigo_item_lista_servico>
+      <descritivo>Descrição do Serviço 2</descritivo>
+      <aliquota_item_lista_servico>3,00</aliquota_item_lista_servico>
+      <situacao_tributaria>0</situacao_tributaria>
+      <valor_tributavel>1022,06</valor_tributavel>
+    </lista>
+  </itens>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:SignedInfo>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+      <ds:Reference URI="#nota">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <ds:DigestValue>lwCIGgDa36QiSATyUHoLvwbwhXg=</ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>YvIEpkHAi4/n4OpvKm6k7vnhiSaBl9YCgFdPBffd5ovjiHOLK0UFyjg5we5WUAQivmMAOx7GWn/yeUvWPeH9ripfOYQrvtUOAYpbqpuvAnx3jlZCnLSgu4wfyHs6GRsH5fRwtAkXrbD0bc9edXcY2EgTCHTP92TQ2gCdga9fFB4=</ds:SignatureValue>
+    <ds:KeyInfo>
+      <ds:X509Data>
+        <ds:X509Certificate>MIIDETCCAnqgAwIBAgIJANFiUjAUtkAZMA0GCSqGSIb3DQEBCwUAMIGfMS4wLAYD
+VQQDDCVRdWFsaXRhIFNlZ3VyYW5jYSBlIFNhdWRlIE9jdXBhY2lvbmFsMQswCQYD
+VQQGEwJCUjELMAkGA1UECAwCU0MxFjAUBgNVBAcMDUZsb3JpYW5vcG9saXMxLjAs
+BgNVBAoMJVF1YWxpdGEgU2VndXJhbmNhIGUgU2F1ZGUgT2N1cGFjaW9uYWwxCzAJ
+BgNVBAsMAklUMB4XDTE4MDUwOTE5Mzg1MVoXDTE5MDUwOTE5Mzg1MVowgZ8xLjAs
+BgNVBAMMJVF1YWxpdGEgU2VndXJhbmNhIGUgU2F1ZGUgT2N1cGFjaW9uYWwxCzAJ
+BgNVBAYTAkJSMQswCQYDVQQIDAJTQzEWMBQGA1UEBwwNRmxvcmlhbm9wb2xpczEu
+MCwGA1UECgwlUXVhbGl0YSBTZWd1cmFuY2EgZSBTYXVkZSBPY3VwYWNpb25hbDEL
+MAkGA1UECwwCSVQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALeLfY9iMPbh
+rlFYeKzA/KEYkLXGO3c/Bw/mYfDqapGqt3NFAKGbxfKRjtHfjl46F+hhNlIMrUyV
+JO8Ihs2pXkYEKBogi6+JYvyJvcJlxrgmaaiDhgbGERHoi7jec+SLhQg62693GmIf
+j5omWzHl6Ca0q3OICx/xEeWcrqhsvI0TAgMBAAGjUzBRMB0GA1UdDgQWBBThp900
+1aqS8t7oNNpJbKPh7zt9KzAfBgNVHSMEGDAWgBThp9001aqS8t7oNNpJbKPh7zt9
+KzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4GBAK8ZlStiOQcsRl//
+xLOnjoZo9P/nCfgJom72A9SozyUZ+BC0xKqu5+Myngqai5BavsI0t0QfNXnz995n
+tqCpuQuO/6/lrb90tApoghOxljoKRzFdbxmpa4UQ85jgFsCk66a3uOGGIZvXR7eP
+mAlNbPO5iLh8c3PnAv9NLCBIXaff
+</ds:X509Certificate>
+      </ds:X509Data>
+    </ds:KeyInfo>
+  </ds:Signature>
+</nfse>

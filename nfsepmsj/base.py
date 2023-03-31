@@ -83,7 +83,7 @@ class BaseNFSe(object):
         del self.cancel_batch
         self.cancel_batch = []
 
-    def sign(self, xml_element, reference_uri=None):
+    def sign(self, xml_element, reference_uri=None, use_ds_namespace=False):
         unsafe_signer = xml.XMLSignerUnsafe(
             method=signxml.methods.enveloped,
             signature_algorithm='rsa-sha1',
@@ -94,5 +94,6 @@ class BaseNFSe(object):
             etree.ElementTree(xml_element),
             self.cert_data,
             reference_uri=reference_uri,
-            signer=unsafe_signer
+            use_ds_namespace=use_ds_namespace,
+            signer=unsafe_signer,
         )

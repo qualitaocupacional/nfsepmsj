@@ -101,10 +101,26 @@ class TestClients(unittest.TestCase):
             pfx_passwd=self.cert_passw,
             target='test'
         )
-        signed_nfse = nfse.add_rps(self.nfse_data)
+        xml_nfse = nfse.add_rps(self.nfse_data)
         xml_expec_tree = xml.load_fromfile(os.path.join(self.here, 'fixtures', 'ipm-nfse-full-test.xml'), clean=True)
         # save output
-        # xml.dump_tofile(signed_nfse, xml_file=os.path.join(self.here, 'fixtures', 'ipm-out.xml'), pretty_print=True)
+        # xml.dump_tofile(xml_nfse, xml_file=os.path.join(self.here, 'fixtures', 'ipm-out.xml'), pretty_print=True)
+        xml_out = xml.dump_tostring(xml_nfse)
+        xml_expected = xml.dump_tostring(xml_expec_tree)
+        self.assertEqual(xml_out, xml_expected)
+
+
+    def test_ipm_xml_signed(self):
+        nfse = NFSeIPM(
+            ws_url='https://',
+            pfx_file=self.cert_file,
+            pfx_passwd=self.cert_passw,
+            target='test'
+        )
+        signed_nfse = nfse.add_rps(self.nfse_data, sign_xml=True)
+        xml_expec_tree = xml.load_fromfile(os.path.join(self.here, 'fixtures', 'ipm-nfse-signed-test.xml'), clean=True)
+        # save output
+        # xml.dump_tofile(signed_nfse, xml_file=os.path.join(self.here, 'fixtures', 'ipm-signed-out.xml'), pretty_print=True)
         xml_out = xml.dump_tostring(signed_nfse)
         xml_expected = xml.dump_tostring(xml_expec_tree)
         self.assertEqual(xml_out, xml_expected)

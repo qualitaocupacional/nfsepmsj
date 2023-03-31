@@ -13,6 +13,10 @@
 # limitations under the License.
 # ==============================================================================
 import datetime
+import uuid
+
+import requests
+
 from nfsepmsj import xml
 from nfsepmsj.base import BaseNFSe
 
@@ -89,33 +93,44 @@ class IPMDataFormat:
 
 class NFSeIPM(BaseNFSe):
 
-    def __init__(self, ws_url, pfx_file: str = None, pfx_passwd: str = None, target: str = 'production'):
+    def __init__(self, ws_url: str, user: str, passwd: str, pfx_file: str = None, pfx_passwd: str = None, target: str = 'production'):
         super(NFSeIPM, self).__init__(pfx_file, pfx_passwd, target)
         self.ws_url = ws_url
+        self.user = user
+        self.passwd = passwd
         self._data = {}
         self.data_format = IPMDataFormat()
+        self.session_cookie = None
 
     @property
-    def data(self):
+    def data(self) -> dict[str, str]:
         return self._data
     
     @data.setter
-    def data(self, value: dict):
-        # validate??
+    def data(self, value: dict) -> None:
+        # TODO: fields validate
         self._data = value
         # Formating
         if 'nf.tomador.logradouro' in self._data and 'nf.tomador.numero_logradouro' in self._data:
             self._data['nf.tomador.logradouro'] = f"{self._data['nf.tomador.logradouro']}, {self._data['nf.tomador.numero_logradouro']}"
 
-    def _data_format(self, field_name: str, field_value: str):
+    def _data_format(self, field_name: str, field_value: str) -> str:
         attr = self.data_format.data.get(field_name)
         if attr is not None:
             if attr['format'] and callable(attr['format']):
                 return attr['format'](field_value)
         return field_value
 
-    def xml(self):
-        root = xml.create_root_element('nfse')
+    def connect(self) -> requests.Session:
+        session = requests.Session()
+        session.auth(self.user, self.passwd)
+        return session
+
+    def xml(self, sign_xml: bool=False) -> xml.etree.Element:
+        if sign_xml:
+            root = xml.create_root_element('nfse', id='nota')
+        else:
+            root = xml.create_root_element('nfse')
         if self.target != 'production':
             xml.add_element(root, None, 'nfse_teste', text='1')
         xml.add_element(root, None, 'nf')
@@ -163,9 +178,24 @@ class NFSeIPM(BaseNFSe):
             xml.add_element(servico, None, 'aliquota_item_lista_servico', text=self._data_format('item.aliquota_iss', item['item.aliquota_iss']))
             xml.add_element(servico, None, 'situacao_tributaria', text=self._data_format('item.situacao_tributaria', item['item.situacao_tributaria']))
             xml.add_element(servico, None, 'valor_tributavel', text=self._data_format('item.base_calculo', item['item.base_calculo']))
+        if sign_xml:
+            return self.sign(root, reference_uri='#nota', use_ds_namespace=True)
         return root
     
-    def add_rps(self, rps_fields):
+    def add_rps(self, rps_fields, sign_xml=False) -> xml.etree.Element:
         self.data = rps_fields
-        xml_data_signed = self.xml()
+        xml_data_signed = self.xml(sign_xml=sign_xml)
+        if not self.data.get('rps.lote.id'):
+            self.data['rps.lote.id'] = str(uuid.uuid4())
+        self.rps_batch.append((self.data.get('rps.lote.id'), xml_data_signed))
         return xml_data_signed
+    
+    def send(self) -> list[tuple[str, requests.Response]]:
+        ws = self.connect()
+        responses = []
+        for nfse_id, nfse in self.rps_batch:
+            str_xml = xml.dump_tostring(nfse)
+            nfse_file = {'file': ('nfse.xml', str_xml)}
+            response = ws.post(self.ws_url, files=nfse_file)
+            responses.append((nfse_id, response))
+        return responses
